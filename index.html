@@ -176,88 +176,85 @@
             z-index: 2;
         }
         
-        .heart-container {
-            position: relative;
-            width: 250px;
-            height: 230px;
-            margin: 20px auto;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        
-        .heart-shape {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: all 0.5s ease;
-            z-index: 5;
-        }
-        
-        .heart-shape:before, 
-        .heart-shape:after {
-            position: absolute;
-            content: "";
-            left: 125px;
-            top: 0;
-            width: 125px;
-            height: 200px;
-            background: #ff2b80;
-            border-radius: 125px 125px 0 0;
-            transform: rotate(-45deg);
-            transform-origin: 0 100%;
-            transition: all 0.5s ease;
-            box-shadow: 0 0 20px rgba(166, 28, 91, 0.4);
-        }
-        
-        .heart-shape:after {
-            left: 0;
-            transform: rotate(45deg);
-            transform-origin: 100% 100%;
-        }
-        
-        .heart-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-weight: bold;
-            font-size: 1.5rem;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-            z-index: 10;
-            transition: all 0.3s ease;
-        }
-        
         .shayari-container {
+            background: linear-gradient(135deg, #ffe6f2 0%, #ffcce6 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(166, 28, 91, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .shayari-container::before {
+            content: """;
+            font-size: 100px;
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: all 0.5s ease;
+            top: -30px;
+            left: 10px;
+            color: rgba(255, 105, 180, 0.2);
+            font-family: Arial;
             z-index: 1;
         }
         
-        .shayari-content {
-            background: linear-gradient(135deg, #ffe6f2 0%, #ffcce6 100%);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(166, 28, 91, 0.2);
-            width: 90%;
-            max-height: 90%;
-            overflow-y: auto;
+        .shayari-container::after {
+            content: """;
+            font-size: 100px;
+            position: absolute;
+            bottom: -50px;
+            right: 10px;
+            color: rgba(255, 105, 180, 0.2);
+            font-family: Arial;
+            transform: rotate(180deg);
+            z-index: 1;
         }
         
         .shayari-text {
-            font-size: 1.2rem;
-            line-height: 1.6;
+            font-size: 1.3rem;
+            line-height: 1.8;
             color: #99004d;
             font-style: italic;
             text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .shayari-line {
+            margin: 15px 0;
+            display: block;
+        }
+        
+        .shayari-word {
+            display: inline-block;
+            white-space: nowrap;
+        }
+        
+        .shayari-char {
+            display: inline-block;
+            position: relative;
+            font-weight: bold;
+            animation: colorChange 3s infinite alternate;
+        }
+        
+        @keyframes colorChange {
+            0% { color: #ff1a75; text-shadow: 0 0 5px #ff1a75; }
+            20% { color: #ff3385; text-shadow: 0 0 5px #ff3385; }
+            40% { color: #ff4d94; text-shadow: 0 0 5px #ff4d94; }
+            60% { color: #ff66a3; text-shadow: 0 0 5px #ff66a3; }
+            80% { color: #ff80b3; text-shadow: 0 0 5px #ff80b3; }
+            100% { color: #ff99c2; text-shadow: 0 0 5px #ff99c2; }
+        }
+        
+        .shayari-char:nth-child(2n) {
+            animation-delay: 0.5s;
+        }
+        
+        .shayari-char:nth-child(3n) {
+            animation-delay: 1s;
+        }
+        
+        .shayari-char:nth-child(5n) {
+            animation-delay: 1.5s;
         }
         
         .footer {
@@ -302,52 +299,44 @@
         }
         
         @media (max-width: 600px) {
-            .heart-container {
-                width: 200px;
-                height: 180px;
-            }
-            
-            .heart-shape:before, 
-            .heart-shape:after {
-                left: 100px;
-                width: 100px;
-                height: 160px;
-                border-radius: 100px 100px 0 0;
-            }
-            
             .shayari-text {
                 font-size: 1.1rem;
+            }
+            
+            .shayari-container {
+                padding: 20px;
+            }
+            
+            .shayari-container::before,
+            .shayari-container::after {
+                font-size: 80px;
+            }
+            
+            .shayari-container::before {
+                top: -20px;
+            }
+            
+            .shayari-container::after {
+                bottom: -40px;
             }
         }
         
         @media (max-width: 400px) {
-            .heart-container {
-                width: 150px;
-                height: 135px;
-            }
-            
-            .heart-shape:before, 
-            .heart-shape:after {
-                left: 75px;
-                width: 75px;
-                height: 120px;
-                border-radius: 75px 75px 0 0;
-            }
-            
-            .heart-text {
-                font-size: 1.2rem;
-            }
-            
             .name-letter {
                 font-size: 1.8rem;
             }
             
-            .shayari-content {
+            .shayari-text {
+                font-size: 1rem;
+            }
+            
+            .shayari-container {
                 padding: 15px;
             }
             
-            .shayari-text {
-                font-size: 1rem;
+            .shayari-container::before,
+            .shayari-container::after {
+                font-size: 60px;
             }
         }
     </style>
@@ -388,20 +377,9 @@
         </header>
         
         <div class="content">
-            <div class="heart-container" id="heartContainer">
-                <div class="heart-shape" id="heartShape">
-                    <div class="heart-text" id="heartText">OPEN</div>
-                </div>
-                
-                <div class="shayari-container" id="shayariContainer">
-                    <div class="shayari-content">
-                        <p class="shayari-text">
-                            "Khoobsurat Sa Ek Lamha, Kahaani Ban Gya,<br>
-                            NaJaane Kaise Vo Meri Zindagi Ka Hissa Ban Gya,<br>
-                            Ek Ladki Aisi Aayi Meri Zindagi Mein,<br>
-                            Jis Se Kabhi Na Tootne Wala Rishta Ban Gya …"
-                        </p>
-                    </div>
+            <div class="shayari-container">
+                <div class="shayari-text" id="shayariText">
+                    <!-- Shayari will be inserted by JavaScript -->
                 </div>
             </div>
         </div>
@@ -437,50 +415,47 @@
             }
         }
         
-        // Heart break animation
-        function setupHeartAnimation() {
-            const heartContainer = document.getElementById('heartContainer');
-            const heartShape = document.getElementById('heartShape');
-            const heartText = document.getElementById('heartText');
-            const shayariContainer = document.getElementById('shayariContainer');
+        // Create animated shayari text
+        function createShayari() {
+            const shayariText = document.getElementById('shayariText');
+            const shayari = [
+                "Khoobsurat sa ek lamha, kahaani ban gaya,",
+                "Na jaane kaise vo meri zindagi ka nishaani ban gaya,",
+                "Chaand si roshni lekar ek ladki aayi,",
+                "Muskaan uski sitaron ki mehfil sa ban gaya,",
+                "Aur yunhi, ek rishta bana jo kabhi toot na paaya"
+            ];
             
-            let isOpen = false;
-            
-            heartContainer.addEventListener('click', function() {
-                if (!isOpen) {
-                    // Break the heart
-                    heartShape.style.transform = 'scale(1.5)';
-                    heartShape.style.opacity = '0';
+            shayari.forEach(line => {
+                const lineElem = document.createElement('div');
+                lineElem.classList.add('shayari-line');
+                
+                const words = line.split(' ');
+                words.forEach(word => {
+                    const wordElem = document.createElement('span');
+                    wordElem.classList.add('shayari-word');
                     
-                    // Hide the "OPEN" text
-                    heartText.style.opacity = '0';
+                    // Add each character with animation
+                    for (let i = 0; i < word.length; i++) {
+                        const charElem = document.createElement('span');
+                        charElem.classList.add('shayari-char');
+                        charElem.textContent = word[i];
+                        wordElem.appendChild(charElem);
+                    }
                     
-                    // Show the shayari inside the heart
-                    shayariContainer.style.opacity = '1';
-                    shayariContainer.style.zIndex = '10';
-                    
-                    isOpen = true;
-                } else {
-                    // Reset the heart
-                    heartShape.style.transform = 'scale(1)';
-                    heartShape.style.opacity = '1';
-                    
-                    // Show the "OPEN" text
-                    heartText.style.opacity = '1';
-                    
-                    // Hide the shayari
-                    shayariContainer.style.opacity = '0';
-                    shayariContainer.style.zIndex = '1';
-                    
-                    isOpen = false;
-                }
+                    lineElem.appendChild(wordElem);
+                    // Add space after word
+                    lineElem.appendChild(document.createTextNode(' '));
+                });
+                
+                shayariText.appendChild(lineElem);
             });
         }
         
         // Initialize everything when page loads
         window.onload = function() {
             createHearts();
-            setupHeartAnimation();
+            createShayari();
         };
     </script>
 </body>
