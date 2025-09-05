@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minuwara Khatun - Friendship Tribute</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kalpurush&family=Hind+Siliguri&display=swap" rel="stylesheet">
+    <title>Minuwara Khatun | Tribute</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,39 +13,81 @@
         }
         
         body {
-            font-family: 'Hind Siliguri', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            color: #333;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ffcce6 0%, #ff99cc 100%);
+            color: #8a0c42;
             line-height: 1.6;
-            padding: 20px;
             min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 15px 30px rgba(166, 28, 91, 0.2);
+            position: relative;
+            padding: 20px;
+        }
+        
+        .hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .heart {
+            position: absolute;
+            color: rgba(255, 105, 180, 0.6);
+            font-size: 20px;
+            animation: float 6s ease-in infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
         }
         
         header {
-            background: linear-gradient(to right, #4e54c8, #8f94fb);
-            color: white;
             text-align: center;
             padding: 30px 20px;
             position: relative;
+            z-index: 2;
         }
         
         .profile-img {
-            width: 150px;
-            height: 150px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
-            border: 5px solid rgba(255, 255, 255, 0.5);
-            margin: 0 auto 15px;
+            border: 5px solid #ff66b2;
+            margin: 0 auto 20px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 20px rgba(166, 28, 91, 0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 105, 180, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 105, 180, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 105, 180, 0); }
         }
         
         .profile-img img {
@@ -55,236 +96,234 @@
             object-fit: cover;
         }
         
-        h1 {
-            font-family: 'Kalpurush', serif;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        .name-container {
+            margin: 20px 0;
         }
         
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            margin-bottom: 15px;
+        .name-letter {
+            display: inline-block;
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin: 0 5px;
+            background: linear-gradient(45deg, #ff4d94, #ff1a75);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: bounce 1.5s ease infinite alternate;
         }
+        
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-15px); }
+        }
+        
+        .name-letter:nth-child(2) { animation-delay: 0.1s; }
+        .name-letter:nth-child(3) { animation-delay: 0.2s; }
+        .name-letter:nth-child(4) { animation-delay: 0.3s; }
+        .name-letter:nth-child(5) { animation-delay: 0.4s; }
+        .name-letter:nth-child(6) { animation-delay: 0.5s; }
+        .name-letter:nth-child(7) { animation-delay: 0.6s; }
+        .name-letter:nth-child(8) { animation-delay: 0.7s; }
+        .name-letter:nth-child(9) { animation-delay: 0.8s; }
+        .name-letter:nth-child(10) { animation-delay: 0.9s; }
+        .name-letter:nth-child(11) { animation-delay: 1.0s; }
+        .name-letter:nth-child(12) { animation-delay: 1.1s; }
+        .name-letter:nth-child(13) { animation-delay: 1.2s; }
         
         .social-link {
             display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
+            background: linear-gradient(45deg, #ff4d94, #ff1a75);
             color: white;
-            padding: 8px 15px;
+            padding: 10px 20px;
             border-radius: 50px;
             text-decoration: none;
-            margin-top: 10px;
+            margin-top: 15px;
             transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(166, 28, 91, 0.3);
         }
         
         .social-link:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(166, 28, 91, 0.4);
         }
         
         .content {
-            padding: 30px;
-        }
-        
-        .section {
-            margin-bottom: 30px;
-        }
-        
-        h2 {
-            font-family: 'Kalpurush', serif;
-            color: #4e54c8;
-            margin-bottom: 15px;
-            padding-bottom: 5px;
-            border-bottom: 2px dashed #8f94fb;
-            display: inline-block;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
         }
         
         .shayari {
-            background: #f8f9ff;
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 4px solid #8f94fb;
+            background: linear-gradient(135deg, #ffe6f2 0%, #ffcce6 100%);
+            padding: 25px;
+            border-radius: 15px;
             margin: 20px 0;
-            text-align: center;
-            font-family: 'Kalpurush', serif;
-            font-size: 1.3rem;
+            box-shadow: 0 5px 15px rgba(166, 28, 91, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .shayari::before {
+            content: """;
+            font-size: 80px;
+            position: absolute;
+            top: -20px;
+            left: 10px;
+            color: rgba(255, 105, 180, 0.2);
+            font-family: Arial;
+        }
+        
+        .shayari-text {
+            font-size: 1.4rem;
             line-height: 1.8;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            color: #99004d;
+            font-style: italic;
         }
         
-        .friendship-info {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin: 20px 0;
-        }
-        
-        .card {
-            flex: 1;
-            min-width: 250px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .card i {
-            font-size: 2.5rem;
-            color: #8f94fb;
-            margin-bottom: 15px;
-        }
-        
-        .card h3 {
-            margin-bottom: 10px;
-            color: #4e54c8;
-        }
-        
-        footer {
+        .footer {
             text-align: center;
             padding: 20px;
-            background: #f1f3ff;
-            color: #666;
-            font-size: 0.9rem;
+            color: #cc0066;
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
         }
         
-        .heart {
-            color: #ff4d4d;
+        .heartbeat {
+            animation: heartbeat 1.5s ease-in-out infinite both;
+            color: #ff1a75;
             display: inline-block;
-            animation: pulse 1.5s infinite;
+            margin: 0 5px;
         }
         
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        @keyframes heartbeat {
+            from {
+                transform: scale(1);
+                transform-origin: center center;
+                animation-timing-function: ease-out;
+            }
+            10% {
+                transform: scale(0.91);
+                animation-timing-function: ease-in;
+            }
+            17% {
+                transform: scale(0.98);
+                animation-timing-function: ease-out;
+            }
+            33% {
+                transform: scale(0.87);
+                animation-timing-function: ease-in;
+            }
+            45% {
+                transform: scale(1);
+                animation-timing-function: ease-out;
+            }
         }
         
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
+            .name-letter {
+                font-size: 2.5rem;
+            }
+            
+            .shayari-text {
+                font-size: 1.2rem;
             }
             
             .profile-img {
-                width: 120px;
-                height: 120px;
-            }
-            
-            .shayari {
-                font-size: 1.1rem;
+                width: 150px;
+                height: 150px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="hearts" id="hearts"></div>
+        
         <header>
             <div class="profile-img">
                 <img src="https://friend-4ever.github.io/Minuwara/minu.png" alt="Minuwara Khatun">
             </div>
-            <h1>Minuwara Khatun</h1>
-            <div class="subtitle">এক истинный বন্ধু এবং সুন্দর ব্যক্তিত্ব</div>
+            
+            <div class="name-container">
+                <span class="name-letter">M</span>
+                <span class="name-letter">i</span>
+                <span class="name-letter">n</span>
+                <span class="name-letter">u</span>
+                <span class="name-letter">w</span>
+                <span class="name-letter">a</span>
+                <span class="name-letter">r</span>
+                <span class="name-letter">a</span>
+                <span class="name-letter"> </span>
+                <span class="name-letter">K</span>
+                <span class="name-letter">h</span>
+                <span class="name-letter">a</span>
+                <span class="name-letter">t</span>
+                <span class="name-letter">u</span>
+                <span class="name-letter">n</span>
+            </div>
+            
             <a href="https://www.facebook.com/photo/?fbid=2391639587877685&set=a.2262041934170785" class="social-link" target="_blank">
-                <i class="fab fa-facebook"></i> Facebook Profile
+                <i class="fab fa-facebook"></i> Visit Facebook Profile
             </a>
         </header>
         
         <div class="content">
-            <div class="section">
-                <h2>বন্ধুত্ব সম্পর্কে কিছু কথা</h2>
-                <div class="shayari">
-                    "বন্ধুত্ব হলো না বলা কথারও একটা ভাষা, <br>
-                    দূরত্বের মাঝেও যার থাকে নিকটের বসবাস। <br>
-                    হাসি-কান্নার সাথী যে হয়, <br>
-                    জীবনপথের সেই истинный বন্ধু হয়।"
-                </div>
-                
-                <div class="friendship-info">
-                    <div class="card">
-                        <i class="fas fa-hands-helping"></i>
-                        <h3>সাহায্য</h3>
-                        <p>একটি истинный বন্ধুত্ব সবসময়相互支援 এবং相互尊重之上建立</p>
-                    </div>
-                    
-                    <div class="card">
-                        <i class="fas fa-laugh-beam"></i>
-                        <h3>খুশি</h3>
-                        <p>বন্ধুরা একসাথে每一刻কে特别 করে,即使是在困难时期</p>
-                    </div>
-                    
-                    <div class="card">
-                        <i class="fas fa-heart"></i>
-                        <h3>ভালবাসা</h3>
-                        <p>বন্ধুত্ব是一种无私的爱, যে কোনো পরিস্থিতিতে অটুট থাকে</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="section">
-                <h2>বন্ধুত্বের গুরুত্ব</h2>
-                <p>বন্ধুত্ব জীবন中最宝贵的礼物之一। Minuwara Khatunのような友達がいることは一種の祝福।她是一個特別的人, যার উপস্থিতি জীবনকে更加明亮 করে。</p>
-                <p>真正的朋友像星星一样, আপনি তাদের সবসময় দেখতে পাচ্ছেন না, কিন্তু আপনি জানেন তারা总是存在।这种纽带是無条件的, সময়ের পরীক্ষায় দাঁড়ায়।</p>
-                
-                <div class="shayari">
-                    "পথে若偶爾黑暗中 পড়ে যাই, <br>
-                    বন্ধুরা আলো হয়ে আসে। <br>
-                    কথা না বললেও বুঝে যায়, <br>
-                    এমন关系কেই তো বন্ধুত্ব বলে।"
-                </div>
+            <div class="shayari">
+                <p class="shayari-text">
+                    "Bondhutto shopno noye, onubhutir opor nam<br>
+                    Bondhutto shopno noye, onubhutir opor nam<br>
+                    Becho-dhara noye, ekti ongsho tumi amar protimurty<br>
+                    Jiboner shob kichu mone pore, shudhu tomakei pai"
+                </p>
             </div>
         </div>
         
-        <footer>
-            <p>Created with <span class="heart">❤</span> by Mehbub Ali | A tribute to a wonderful friend</p>
-        </footer>
+        <div class="footer">
+            <p>Created with <span class="heartbeat"><i class="fas fa-heart"></i></span> by Mehbub Ali</p>
+        </div>
     </div>
 
     <script>
-        // Simple animation for the page elements
-        document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.card');
-            const shayaris = document.querySelectorAll('.shayari');
+        // Create floating hearts
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts');
+            const heartCount = 25;
             
-            // Animate cards on load
-            setTimeout(() => {
-                cards.forEach((card, index) => {
-                    setTimeout(() => {
-                        card.style.opacity = 1;
-                        card.style.transform = 'translateY(0)';
-                    }, index * 200);
-                });
-            }, 500);
-            
-            // Animate shayaris
-            setTimeout(() => {
-                shayaris.forEach((shayari, index) => {
-                    setTimeout(() => {
-                        shayari.style.opacity = 1;
-                        shayari.style.transform = 'translateY(0)';
-                    }, index * 300);
-                });
-            }, 1000);
-            
-            // Initialize element styles for animation
-            cards.forEach(card => {
-                card.style.opacity = 0;
-                card.style.transform = 'translateY(20px)';
-                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '<i class="fas fa-heart"></i>';
+                heart.classList.add('heart');
+                
+                // Random position
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.top = Math.random() * 100 + '%';
+                
+                // Random size
+                const size = Math.random() * 15 + 10;
+                heart.style.fontSize = size + 'px';
+                
+                // Random animation delay
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                
+                heartsContainer.appendChild(heart);
+            }
+        }
+        
+        // Animate name letters on scroll
+        function animateLetters() {
+            const letters = document.querySelectorAll('.name-letter');
+            letters.forEach((letter, index) => {
+                letter.style.animation = `bounce 1.5s ease ${index * 0.1}s infinite alternate`;
             });
-            
-            shayaris.forEach(shayari => {
-                shayari.style.opacity = 0;
-                shayari.style.transform = 'translateY(20px)';
-                shayari.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-            });
-        });
+        }
+        
+        // Initialize everything when page loads
+        window.onload = function() {
+            createHearts();
+            animateLetters();
+        };
     </script>
 </body>
 </html>
