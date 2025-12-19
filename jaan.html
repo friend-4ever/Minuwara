@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="bn" translate="no" class="notranslate">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="google" content="notranslate">
+    
     <title>Mehbub & Minuwara - Love Story</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Noto+Serif+Bengali:wght@400;700&display=swap" rel="stylesheet">
     
@@ -48,7 +51,7 @@
 
         /* Container */
         .container {
-            width: 95%; /* মোবাইলে জায়গা বাড়ানোর জন্য width বাড়ানো হলো */
+            width: 95%; 
             max-width: 600px;
             background: transparent;
             backdrop-filter: none;
@@ -81,14 +84,11 @@
              to { transform: scale(1.05); filter: drop-shadow(0 0 15px rgba(255, 0, 128, 1)) drop-shadow(0 0 35px rgba(255, 105, 180, 0.9)) drop-shadow(0 0 50px rgba(255, 20, 147, 0.7)); }
         }
 
-
         /* === Typography === */
-        
-        /* H1 - নরমাল বোল্ড */
         h1 { 
             font-family: 'Segoe UI', 'Roboto', sans-serif;
             color: #ff0055;
-            font-size: 3rem; /* মোবাইলে একটু ছোট করা হলো */
+            font-size: 3rem; 
             margin-bottom: 5px;
             font-weight: 900; 
             text-transform: uppercase;
@@ -96,40 +96,31 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px #ff1493, 0 0 40px #ff69b4;
         }
 
-        /* === Names Area Updated Style === */
+        /* === Names Area === */
         .names {
-            /* স্টাইলিশ ফন্ট */
             font-family: 'Dancing Script', cursive; 
             font-weight: 700;
-            
-            /* গ্রেডিয়েন্ট কালার */
             background: -webkit-linear-gradient(#ff512f, #dd2476);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            
             margin: 10px 0 25px 0;
-            
-            /* এক লাইনে রাখার সেটিংস */
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            white-space: nowrap; /* টেক্সট ভাঙবে না */
-            gap: 8px; /* টেক্সট ও হার্টের মাঝের গ্যাপ */
+            white-space: nowrap; 
+            gap: 8px; 
         }
 
-        /* কম্পিউটার বা বড় স্ক্রিনে সাইজ */
         @media (min-width: 450px) {
             .names { font-size: 2rem; }
             .center-heart-glow { font-size: 2.2rem; margin: 0 10px; }
         }
 
-        /* মোবাইল স্ক্রিনে সাইজ (যাতে এক লাইনে থাকে) */
         @media (max-width: 449px) {
-            .names { font-size: 1.3rem; } /* ফন্ট ছোট করা হলো */
-            .center-heart-glow { font-size: 1.4rem; margin: 0 5px; } /* হার্ট ছোট করা হলো */
-            h1 { font-size: 2.2rem; } /* টাইটেল মোবাইলে একটু ছোট */
+            .names { font-size: 1.3rem; } 
+            .center-heart-glow { font-size: 1.4rem; margin: 0 5px; } 
+            h1 { font-size: 2.2rem; } 
         }
         
-        /* Glowing Blur Heart Symbol */
         .center-heart-glow {
             display: inline-block;
             -webkit-text-fill-color: initial; 
@@ -144,7 +135,6 @@
             100% { transform: scale(1.2); filter: blur(2px); text-shadow: 0 0 15px rgba(255, 0, 0, 1), 0 0 30px rgba(255, 50, 50, 0.8); }
         }
 
-        /* Other Text Styles */
         h2, .section-title {
             color: #c0392b; font-size: 1.8rem; margin-top: 35px; margin-bottom: 15px;
             border-bottom: 2px solid #ff9a9e; display: inline-block; padding-bottom: 5px;
@@ -183,6 +173,11 @@
 </head>
 <body>
 
+    <audio id="myAudio" loop>
+        <source src="https://friend-4ever.github.io/Minuwara/song.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
     <div class="hearts" id="hearts-container"></div>
 
     <div class="container">
@@ -219,7 +214,30 @@
     </div>
 
     <script>
-        // Background Multi-color Blur Hearts Animation
+        // === Background Audio Force Logic ===
+        const audio = document.getElementById("myAudio");
+        audio.volume = 1.0; 
+
+        function attemptPlay() {
+            audio.play().then(() => {
+                console.log("Audio playing successfully");
+                document.removeEventListener('click', attemptPlay);
+                document.removeEventListener('touchstart', attemptPlay);
+                document.removeEventListener('scroll', attemptPlay);
+                document.removeEventListener('mousemove', attemptPlay);
+            }).catch(error => {
+                console.log("Audio blocked by browser, waiting for user interaction.");
+            });
+        }
+
+        window.addEventListener('load', attemptPlay);
+        document.body.addEventListener('mousemove', attemptPlay);
+        document.body.addEventListener('click', attemptPlay);
+        document.body.addEventListener('touchstart', attemptPlay);
+        document.addEventListener('scroll', attemptPlay);
+
+
+        // === Background Multi-color Blur Hearts Animation ===
         function createHearts() {
             const container = document.getElementById('hearts-container');
             const heartCount = 35; 
@@ -229,7 +247,6 @@
                 heart.classList.add('heart');
                 heart.style.left = Math.random() * 100 + 'vw';
                 heart.style.animationDuration = Math.random() * 8 + 10 + 's'; 
-                // Negative delay: পেজ খোলার সাথে সাথেই হার্ট দেখা যাবে
                 heart.style.animationDelay = (Math.random() * -15) + 's';
 
                 const red = 255;
@@ -244,5 +261,3 @@
     </script>
 </body>
 </html>
-
-
