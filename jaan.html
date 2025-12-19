@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <meta name="google" content="notranslate">
-    
     <title>Mehbub & Minuwara - Love Story</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Noto+Serif+Bengali:wght@400;700&display=swap" rel="stylesheet">
     
@@ -214,23 +212,41 @@
     </div>
 
     <script>
-        // === Background Audio Force Logic ===
+        // === Background Audio Logic (FIXED VOLUME 20% & FORCE PLAY) ===
         const audio = document.getElementById("myAudio");
-        audio.volume = 1.0; 
 
+        // 1. Set Volume to 20% (Low)
+        audio.volume = 0.2; 
+
+        // 2. Lock Volume: If anyone tries to change it, force it back to 0.2
+        audio.addEventListener('volumechange', function() {
+            if(audio.volume !== 0.2) {
+                audio.volume = 0.2;
+            }
+        });
+
+        // 3. Force Play Function
         function attemptPlay() {
+            // Ensure volume is set before playing
+            audio.volume = 0.2;
+            
             audio.play().then(() => {
-                console.log("Audio playing successfully");
+                console.log("Audio playing at 20% volume.");
+                // If successful, remove listeners
                 document.removeEventListener('click', attemptPlay);
                 document.removeEventListener('touchstart', attemptPlay);
                 document.removeEventListener('scroll', attemptPlay);
                 document.removeEventListener('mousemove', attemptPlay);
             }).catch(error => {
-                console.log("Audio blocked by browser, waiting for user interaction.");
+                // If blocked, keep listeners active
+                console.log("Audio blocked. Waiting for interaction.");
             });
         }
 
+        // Try to play immediately on load
         window.addEventListener('load', attemptPlay);
+
+        // Try to play on ANY small interaction (Scroll, Touch, Mouse)
         document.body.addEventListener('mousemove', attemptPlay);
         document.body.addEventListener('click', attemptPlay);
         document.body.addEventListener('touchstart', attemptPlay);
