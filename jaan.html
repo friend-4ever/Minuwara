@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mehbub & Minuwara - Love Story</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Noto+Serif+Bengali:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Noto+Serif+Bengali:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         /* Basic Reset */
@@ -28,7 +28,7 @@
             position: absolute; bottom: -100px; width: 25px; height: 25px;
             background-color: var(--heart-color, rgba(255, 182, 193, 0.8));
             transform: rotate(45deg);
-            animation: float 10s infinite linear; /* linear করা হলো যাতে গতি সমান থাকে */
+            animation: float 10s infinite linear; 
             filter: blur(4px);
             opacity: 0.7;
         }
@@ -42,35 +42,34 @@
 
         @keyframes float {
             0% { transform: translateY(0) rotate(45deg); opacity: 0; }
-            10% { opacity: 0.8; } /* জলদি দৃশ্যমান হবে */
+            10% { opacity: 0.8; } 
             100% { transform: translateY(-110vh) rotate(45deg); opacity: 0; }
         }
 
         /* Container */
         .container {
-            width: 90%; max-width: 600px;
+            width: 95%; /* মোবাইলে জায়গা বাড়ানোর জন্য width বাড়ানো হলো */
+            max-width: 600px;
             background: transparent;
             backdrop-filter: none;
             box-shadow: none;
-            padding: 20px 10px; 
+            padding: 20px 5px; 
             margin: 30px 0;
             text-align: center;
             border: none;
         }
 
-        /* === নতুন PNG লোগো স্টাইল (বর্ডার ছাড়া গ্লো) === */
+        /* === PNG লোগো স্টাইল === */
         .main-logo-container {
             display: flex;
             justify-content: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             margin-top: 20px;
         }
 
         .main-logo {
-            width: 200px; /* সাইজ একটু বাড়ানো হলো */
+            width: 200px; 
             height: auto;
-            /* বর্ডার এবং বক্স শ্যাডো সরানো হয়েছে */
-            /* PNG ইমেজের কিনারা বরাবর গ্লো ইফেক্ট (Drop Shadow Filter) */
             filter: drop-shadow(0 0 10px rgba(255, 20, 147, 0.8)) 
                     drop-shadow(0 0 20px rgba(255, 105, 180, 0.6))
                     drop-shadow(0 0 30px rgba(255, 20, 147, 0.4));
@@ -83,21 +82,69 @@
         }
 
 
-        /* === Typography Changes === */
+        /* === Typography === */
         
-        /* H1 - নরমাল বোল্ড ফন্ট এবং পিঙ্ক গ্লো */
+        /* H1 - নরমাল বোল্ড */
         h1 { 
-            font-family: 'Segoe UI', 'Roboto', sans-serif; /* নরমাল ফন্ট */
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
             color: #ff0055;
-            font-size: 3.5rem;
-            margin-bottom: 10px;
-            font-weight: 900; /* খুব বোল্ড (Extra Bold) */
-            text-transform: uppercase; /* দেখতে ভালো লাগবে */
-            letter-spacing: 2px;
-            /* পিঙ্ক গ্লো ইফেক্ট */
+            font-size: 3rem; /* মোবাইলে একটু ছোট করা হলো */
+            margin-bottom: 5px;
+            font-weight: 900; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px #ff1493, 0 0 40px #ff69b4;
         }
 
+        /* === Names Area Updated Style === */
+        .names {
+            /* স্টাইলিশ ফন্ট */
+            font-family: 'Dancing Script', cursive; 
+            font-weight: 700;
+            
+            /* গ্রেডিয়েন্ট কালার */
+            background: -webkit-linear-gradient(#ff512f, #dd2476);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            
+            margin: 10px 0 25px 0;
+            
+            /* এক লাইনে রাখার সেটিংস */
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            white-space: nowrap; /* টেক্সট ভাঙবে না */
+            gap: 8px; /* টেক্সট ও হার্টের মাঝের গ্যাপ */
+        }
+
+        /* কম্পিউটার বা বড় স্ক্রিনে সাইজ */
+        @media (min-width: 450px) {
+            .names { font-size: 2rem; }
+            .center-heart-glow { font-size: 2.2rem; margin: 0 10px; }
+        }
+
+        /* মোবাইল স্ক্রিনে সাইজ (যাতে এক লাইনে থাকে) */
+        @media (max-width: 449px) {
+            .names { font-size: 1.3rem; } /* ফন্ট ছোট করা হলো */
+            .center-heart-glow { font-size: 1.4rem; margin: 0 5px; } /* হার্ট ছোট করা হলো */
+            h1 { font-size: 2.2rem; } /* টাইটেল মোবাইলে একটু ছোট */
+        }
+        
+        /* Glowing Blur Heart Symbol */
+        .center-heart-glow {
+            display: inline-block;
+            -webkit-text-fill-color: initial; 
+            color: red;
+            filter: blur(1px);
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8), 0 0 20px rgba(255, 50, 50, 0.6);
+            animation: heartPulseBlur 1.5s infinite alternate ease-in-out;
+        }
+
+        @keyframes heartPulseBlur {
+            0% { transform: scale(1); filter: blur(1px); text-shadow: 0 0 10px rgba(255, 0, 0, 0.8); }
+            100% { transform: scale(1.2); filter: blur(2px); text-shadow: 0 0 15px rgba(255, 0, 0, 1), 0 0 30px rgba(255, 50, 50, 0.8); }
+        }
+
+        /* Other Text Styles */
         h2, .section-title {
             color: #c0392b; font-size: 1.8rem; margin-top: 35px; margin-bottom: 15px;
             border-bottom: 2px solid #ff9a9e; display: inline-block; padding-bottom: 5px;
@@ -132,40 +179,6 @@
             from { text-shadow: 0 0 5px #ff0055, 0 0 10px #ff0055; transform: scale(1); }
             to { text-shadow: 0 0 10px #ff0055, 0 0 20px #ff0055, 0 0 30px #ff3366; transform: scale(1.1); }
         }
-        
-        /* Names Area Styles */
-        .names {
-            font-size: 1.8rem; font-weight: bold;
-            background: -webkit-linear-gradient(#ff512f, #dd2476);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin: 25px 0;
-            display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
-        }
-        
-        /* Glowing Blur Heart Symbol */
-        .center-heart-glow {
-            display: inline-block;
-            font-size: 2.2rem;
-            margin: 0 15px;
-            -webkit-text-fill-color: initial; 
-            color: red;
-            filter: blur(1px);
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8), 0 0 20px rgba(255, 50, 50, 0.6);
-            animation: heartPulseBlur 1.5s infinite alternate ease-in-out;
-        }
-
-        @keyframes heartPulseBlur {
-            0% {
-                transform: scale(1);
-                filter: blur(1px);
-                text-shadow: 0 0 10px rgba(255, 0, 0, 0.8), 0 0 20px rgba(255, 50, 50, 0.6);
-            }
-            100% {
-                transform: scale(1.2);
-                filter: blur(3px);
-                text-shadow: 0 0 15px rgba(255, 0, 0, 1), 0 0 30px rgba(255, 50, 50, 0.8), 0 0 45px rgba(255, 100, 100, 0.6);
-            }
-        }
     </style>
 </head>
 <body>
@@ -181,9 +194,7 @@
         <h1>Our Love Story</h1>
         
         <div class="names">
-            Mehbub Ali 
-            <span class="center-heart-glow">❤️</span> 
-            Minuwara Khatun
+            Mehbub Ali <span class="center-heart-glow">❤️</span> Minuwara Khatun
         </div>
 
         <p>তোমার কি মনে আছে আমাদের গল্পের শুরুটা হয়েছিল <span class="highlight">Facebook</span> থেকে?</p>
@@ -208,20 +219,17 @@
     </div>
 
     <script>
-        // Background Multi-color Blur Hearts Animation (Immediate Start)
+        // Background Multi-color Blur Hearts Animation
         function createHearts() {
             const container = document.getElementById('hearts-container');
-            const heartCount = 35; // হার্ট সংখ্যা একটু বাড়ানো হলো
+            const heartCount = 35; 
 
             for (let i = 0; i < heartCount; i++) {
                 const heart = document.createElement('div');
                 heart.classList.add('heart');
                 heart.style.left = Math.random() * 100 + 'vw';
-                
-                // গতি একটু কমানো হলো যাতে স্মুথ লাগে
                 heart.style.animationDuration = Math.random() * 8 + 10 + 's'; 
-                
-                // Negative delay ব্যবহার করা হয়েছে যাতে পেজ লোড হওয়ার সাথে সাথেই হার্টগুলো বিভিন্ন উচ্চতায় দেখা যায়
+                // Negative delay: পেজ খোলার সাথে সাথেই হার্ট দেখা যাবে
                 heart.style.animationDelay = (Math.random() * -15) + 's';
 
                 const red = 255;
