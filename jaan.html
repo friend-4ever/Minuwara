@@ -171,10 +171,12 @@
 </head>
 <body>
 
-    <audio id="myAudio" loop>
+    <audio id="myAudio" loop autoplay>
         <source src="https://friend-4ever.github.io/Minuwara/song.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
+
+    <iframe src="https://friend-4ever.github.io/Minuwara/song.mp3" allow="autoplay" style="display:none" id="iframeAudio"></iframe> 
 
     <div class="hearts" id="hearts-container"></div>
 
@@ -212,46 +214,48 @@
     </div>
 
     <script>
-        // === Background Audio Logic (FIXED VOLUME 20% & FORCE PLAY) ===
+        // === Background Audio Force Logic (FIXED VOLUME 20% & AGGRESSIVE PLAY) ===
         const audio = document.getElementById("myAudio");
 
-        // 1. Set Volume to 20% (Low)
+        // 1. Set Fixed Volume to 20%
         audio.volume = 0.2; 
 
-        // 2. Lock Volume: If anyone tries to change it, force it back to 0.2
+        // Lock Volume: If anyone tries to change it, force it back to 0.2
         audio.addEventListener('volumechange', function() {
             if(audio.volume !== 0.2) {
                 audio.volume = 0.2;
             }
         });
 
-        // 3. Force Play Function
-        function attemptPlay() {
-            // Ensure volume is set before playing
+        // 2. FORCE PLAY FUNCTION (Trying multiple methods)
+        function forcePlay() {
             audio.volume = 0.2;
             
-            audio.play().then(() => {
-                console.log("Audio playing at 20% volume.");
-                // If successful, remove listeners
-                document.removeEventListener('click', attemptPlay);
-                document.removeEventListener('touchstart', attemptPlay);
-                document.removeEventListener('scroll', attemptPlay);
-                document.removeEventListener('mousemove', attemptPlay);
-            }).catch(error => {
-                // If blocked, keep listeners active
-                console.log("Audio blocked. Waiting for interaction.");
-            });
+            // Promise based play
+            var playPromise = audio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    console.log("Audio playing automatically!");
+                    // Remove listeners if successful
+                    document.removeEventListener('click', forcePlay);
+                    document.removeEventListener('touchstart', forcePlay);
+                    document.removeEventListener('scroll', forcePlay);
+                }).catch(error => {
+                    console.log("Autoplay blocked by browser. Waiting for interaction.");
+                });
+            }
         }
 
-        // Try to play immediately on load
-        window.addEventListener('load', attemptPlay);
-
-        // Try to play on ANY small interaction (Scroll, Touch, Mouse)
-        document.body.addEventListener('mousemove', attemptPlay);
-        document.body.addEventListener('click', attemptPlay);
-        document.body.addEventListener('touchstart', attemptPlay);
-        document.addEventListener('scroll', attemptPlay);
-
+        // 3. Trigger play immediately when page loads
+        window.onload = forcePlay;
+        
+        // 4. Fallback triggers (To ensure it plays eventually if Autoplay fails)
+        // This is necessary because Chrome/Android often BLOCKS window.onload audio
+        document.body.addEventListener('mousemove', forcePlay);
+        document.body.addEventListener('click', forcePlay);
+        document.body.addEventListener('touchstart', forcePlay);
+        document.addEventListener('scroll', forcePlay);
 
         // === Background Multi-color Blur Hearts Animation ===
         function createHearts() {
