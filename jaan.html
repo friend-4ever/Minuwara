@@ -10,7 +10,8 @@
 
         body {
             font-family: 'Segoe UI', 'Noto Serif Bengali', sans-serif;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            /* ব্যাকগ্রাউন্ড একটু গাঢ় করা হলো যাতে ট্রান্সপারেন্ট কন্টেইনারে লেখা ফুটে ওঠে */
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fad0c4 100%);
             color: #4a4a4a;
             overflow-x: hidden;
             min-height: 100vh;
@@ -19,34 +20,49 @@
             align-items: center;
         }
 
-        /* Background Animation */
+        /* Background Animation (Hearts) */
         .hearts { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
+        
+        /* হার্টের জন্য CSS ভেরিয়েবল এবং ব্লার ইফেক্ট */
         .heart {
-            position: absolute; bottom: -100px; width: 20px; height: 20px;
-            background-color: rgba(255, 255, 255, 0.5); transform: rotate(45deg);
+            position: absolute; bottom: -100px; width: 25px; height: 25px;
+            /* ডিফল্ট কালার, JS দিয়ে পরিবর্তন হবে */
+            background-color: var(--heart-color, rgba(255, 182, 193, 0.8));
+            transform: rotate(45deg);
             animation: float 10s infinite ease-in;
+            /* ব্লার ইফেক্ট যুক্ত করা হলো */
+            filter: blur(4px);
+            opacity: 0.7;
         }
         .heart::before, .heart::after {
-            content: ""; position: absolute; width: 20px; height: 20px;
-            background-color: rgba(255, 255, 255, 0.5); border-radius: 50%;
+            content: ""; position: absolute; width: 25px; height: 25px;
+            /* প্যারেন্ট এর কালার নেওয়া হচ্ছে */
+            background-color: inherit;
+            border-radius: 50%;
         }
-        .heart::before { top: -10px; left: 0; }
-        .heart::after { left: -10px; top: 0; }
+        .heart::before { top: -12.5px; left: 0; }
+        .heart::after { left: -12.5px; top: 0; }
+
         @keyframes float {
             0% { transform: translateY(0) rotate(45deg); opacity: 0; }
-            50% { opacity: 0.8; }
-            100% { transform: translateY(-100vh) rotate(45deg); opacity: 0; }
+            20% { opacity: 0.8; }
+            100% { transform: translateY(-110vh) rotate(45deg); opacity: 0; }
         }
 
-        /* Container */
+        /* Container - ট্রান্সপারেন্ট করা হয়েছে */
         .container {
             width: 90%; max-width: 600px;
-            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);
+            /* আগের সাদা ব্যাকগ্রাউন্ড এবং বর্ডার সরিয়ে ট্রান্সপারেন্ট করা হলো */
+            background: rgba(255, 255, 255, 0.1); /* খুব হালকা স্বচ্ছ ব্যাকগ্রাউন্ড */
+            backdrop-filter: blur(3px); /* হালকা ব্লার */
             border-radius: 20px; padding: 40px 20px; margin: 50px 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; border: 2px solid #fff;
+            /* শ্যাডো কমিয়ে দেওয়া হলো */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
+            text-align: center;
+            border: none;
         }
 
-        /* PROFILE HEADER (High Level Logic) */
+        /* PROFILE HEADER */
         .profile-header {
             display: flex; justify-content: center; align-items: center;
             gap: 15px; margin-bottom: 25px;
@@ -63,10 +79,10 @@
         .profile-pic {
             width: 90px; height: 90px;
             border-radius: 50%;
-            border: 3px solid #d63384;
+            border: 3px solid #ff3385; /* বর্ডার কালার একটু ডিপ করা হলো */
             padding: 2px;
             object-fit: cover;
-            box-shadow: 0 4px 10px rgba(214, 51, 132, 0.3);
+            box-shadow: 0 4px 10px rgba(214, 51, 132, 0.4);
             background-color: #fff;
         }
 
@@ -84,8 +100,19 @@
             font-size: 3rem; color: #ff4757; animation: beat 1s infinite alternate;
         }
 
-        /* Typography */
-        h1 { font-family: 'Brush Script MT', cursive; color: #d63384; font-size: 3rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
+        /* Typography Changes */
+        
+        /* H1 - নতুন ফন্ট এবং সবুজ গ্লো ইফেক্ট */
+        h1 { 
+            font-family: 'Segoe UI', 'Roboto', sans-serif; /* নরমাল ফন্ট */
+            color: #ff006e; /* পিঙ্ক কালার */
+            font-size: 3rem; 
+            margin-bottom: 10px;
+            font-weight: 800;
+            /* সবুজ গ্লো ইফেক্ট */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2), 0 0 15px #00ff7f, 0 0 30px #00ff7f;
+        }
+
         h2, .section-title {
             color: #c0392b; font-size: 1.8rem; margin-top: 30px; margin-bottom: 15px;
             border-bottom: 2px solid #ff9a9e; display: inline-block; padding-bottom: 5px;
@@ -93,16 +120,18 @@
         }
         .section-title { font-family: 'Segoe UI', sans-serif; font-size: 1.5rem; }
         
-        p { font-size: 1.15rem; line-height: 1.7; margin-bottom: 20px; color: #444; }
+        p { font-size: 1.15rem; line-height: 1.7; margin-bottom: 20px; color: #333; font-weight: 500; }
         .highlight { color: #d63384; font-weight: bold; font-size: 1.25rem; font-family: 'Segoe UI', sans-serif; }
         
+        /* বাংলা কবিতার বক্স ট্রান্সপারেন্ট করা হলো */
         .bengali-poetry {
-            background-color: #fff0f5; padding: 20px; border-radius: 15px;
+            background-color: rgba(255, 240, 245, 0.5); /* সেমি-ট্রান্সপারেন্ট */
+            padding: 20px; border-radius: 15px;
             border: 1px dashed #d63384; margin-top: 30px;
         }
         .bengali-text { font-size: 1.4rem; color: #880e4f; line-height: 1.8; font-weight: 600; font-style: italic; }
 
-        .footer { margin-top: 40px; font-size: 1.1rem; color: #777; }
+        .footer { margin-top: 40px; font-size: 1.1rem; color: #555; }
         .glow-name {
             font-size: 1.5rem; font-weight: bold; color: #ff0055;
             text-shadow: 0 0 5px #ff0055, 0 0 10px #ff0055, 0 0 20px #ff0055;
@@ -129,14 +158,14 @@
         
         <div class="profile-header">
             <a href="https://www.facebook.com/share/1KPWajAUDz/?mibextid=wwXIfr" target="_blank" class="profile-wrapper">
-                <img id="mehbub-pic" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="Mehbub" class="profile-pic">
+                <img id="mehbub-pic" src="https://i.imgur.com/5b147aT.png" alt="Mehbub" class="profile-pic">
                 <div class="fb-badge">f</div>
             </a>
             
             <div class="love-icon-small">❤️</div>
             
             <a href="https://www.facebook.com/share/1B35yiJScq/?mibextid=wwXIfr" target="_blank" class="profile-wrapper">
-                <img id="minuwara-pic" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="Minuwara" class="profile-pic">
+                <img id="minuwara-pic" src="https://cdn-icons-png.flaticon.com/512/6997/6997662.png" alt="Minuwara" class="profile-pic">
                 <div class="fb-badge">f</div>
             </a>
         </div>
@@ -144,22 +173,22 @@
         <h1>Our Love Story</h1>
         <div class="names">Mehbub Ali &infin; Minuwara Khatun</div>
 
-        <p>তোমার কি মনে আছে আমাদের গল্পের শুরুটা হয়েছিল <span class="highlight">Facebook</span> থেকে?</p>
+        <p>তোমার কি মনে আছে আমাদের গল্পের শুরুটা হয়েছিল <span class="highlight">Facebook</span> থেকে?</p>
 
         <h2>Prio</h2>
         <p>মনে আছে সেই প্রথম মেসেজটা? <br> আমি লিখেছিলাম: <span class="highlight">"MKK"</span></p>
-        <p>তোমার <span class="highlight">Facebook ID</span>-তে নাম ছিল <em>"Minuwara Khatun Khatun"</em>. আমি সেটাকে শর্টকাট করে <span class="highlight">MKK</span> বানিয়ে দিয়েছিলাম। আমি যদি সেদিন তোমাকে <span class="highlight">MKK</span> মেসেজটা না দিতাম, তবে হয়তো তুমি <span class="highlight">Reply</span> করতে না, আর আমাদের দেখাও হতো না। <br> <strong>সেই ছোট্ট "MKK" আজ আমার জীবনের সবচেয়ে সুন্দর ইত্তেফাক।</strong></p>
+        <p>তোমার <span class="highlight">Facebook ID</span>-তে নাম ছিল <em>"Minuwara Khatun Khatun"</em>. আমি সেটাকে শর্টকাট করে <span class="highlight">MKK</span> বানিয়ে দিয়েছিলাম। আমি যদি সেদিন তোমাকে <span class="highlight">MKK</span> মেসেজটা না দিতাম, তবে হয়তো তুমি <span class="highlight">Reply</span> করতে না, আর আমাদের দেখাও হতো না। <br> <strong>সেই ছোট্ট "MKK" আজ আমার জীবনের সবচেয়ে সুন্দর ইত্তেফাক।</strong></p>
 
         <div class="section-title">The Unseen Love</div>
-        <p>সত্যি কথা জানো? আমি তোমাকে পাগলের মতো ভালোবাসি কিন্তু কোনদিনও প্রকাশ করিনি, হয়তো একটু করছি তাও তুমি বুঝতে চাওনি। আহারে আমার পাগল মনটা কতবারই না তোমার কাছে ছবি চেয়েছে, কিন্তু তুমি আজও দাওনি।</p>
+        <p>সত্যি কথা জানো? আমি তোমাকে পাগলের মতো ভালোবাসি কিন্তু কোনদিনও প্রকাশ করিনি, হয়তো একটু করছি তাও তুমি বুঝতে চাওনি। আহারে আমার পাগল মনটা কতবারই না তোমার কাছে ছবি চেয়েছে, কিন্তু তুমি আজও দাওনি।</p>
         <p>তুমি বলেছিলে—<em>"আমি <span class="highlight">Photo</span> দেব না, আমার সাথে <span class="highlight">Physically</span> দেখা করো। যেদিন দেখা হবে, সেদিন যত খুশি ছবি তুলে নিও।"</em></p>
-        <p>আমি তোমার সাথে অনেকবার দেখা করার চেষ্টা করেছি, কিন্তু হয়তো উপরওয়ালার কখনো সেটা মঞ্জুর ই ছিল না, তাই আমাদের দেখাও হলো না। হয়তো ভবিষ্যতে দেখা হবে, আর যদি কপালে দেখা নাও থাকে, প্লিজ তুমি আমাকে কোনোদিন ভুলো না।</p>
+        <p>আমি তোমার সাথে অনেকবার দেখা করার চেষ্টা করেছি, কিন্তু হয়তো উপরওয়ালার কখনো সেটা মঞ্জুর ই ছিল না, তাই আমাদের দেখাও হলো না। হয়তো ভবিষ্যতে দেখা হবে, আর যদি কপালে দেখা নাও থাকে, প্লিজ তুমি আমাকে কোনোদিন ভুলো না।</p>
         
-        <p style="color: #d63384; font-weight: 500;">আমি তোমাকে পৃথিবীর সবচাইতে সবার চাইতে বেশি অনেক অনেক অনেক অনেক অনেক অনেক অনেক অনেক অনেক অনেক অনেক অনেক অনেক ভালোবাসি। <br><br> আকাশের যতগুলো না তারা আছে তার চাইতেও তোমাকে বেশি ভালোবাসি। সাগরে যতটুকু পানি আছে তার চাইতেও তোমাকে বেশি ভালোবাসি। এই পৃথিবীতে যতগুলো ধূলিকণা আছে তার চাইতেও তোমাকে বেশি ভালোবাসি। তুমি যতবার তোমার চোখের পলক ফেলো আমি ততবারই তোমাকে ভালোবাসি।</p>
+        <p style="color: #d63384; font-weight: 600; text-shadow: 1px 1px 2px rgba(255,255,255,0.5);">আমি তোমাকে পৃথিবীর সবচাইতে সবার চাইতে বেশি অনেক অনেক অনেক অনেক অনেক অনেক অনেক অনেক অনেক অনেক অনেক অনেক অনেক ভালোবাসি। <br><br> আকাশের যতগুলো না তারা আছে তার চাইতেও তোমাকে বেশি ভালোবাসি। সাগরে যতটুকু পানি আছে তার চাইতেও তোমাকে বেশি ভালোবাসি। এই পৃথিবীতে যতগুলো ধূলিকণা আছে তার চাইতেও তোমাকে বেশি ভালোবাসি। তুমি যতবার তোমার চোখের পলক ফেলো আমি ততবারই তোমাকে ভালোবাসি।</p>
 
         <div class="bengali-poetry">
             <p style="font-size: 1rem; color: #d63384; margin-bottom: 10px;">For you, My MKK:</p>
-            <div class="bengali-text">"তোমায় না দেখেই ভালোবেসেছি,<br> হৃদয়ের মাঝে তোমার ছবি এঁকেছি।<br> তুমি আমার প্রথম প্রেম, তুমিই শেষ আশা,<br> MKK নামেই অমর হোক আমাদের ভালোবাসা।"</div>
+            <div class="bengali-text">"তোমায় না দেখেই ভালোবেসেছি,<br> হৃদয়ের মাঝে তোমার ছবি এঁকেছি।<br> তুমি আমার প্রথম প্রেম, তুমিই শেষ আশা,<br> MKK নামেই অমর হোক আমাদের ভালোবাসা।"</div>
         </div>
 
         <div class="footer">Forever yours,<br> <span class="glow-name">Mehbub Ali</span></div>
@@ -167,30 +196,52 @@
 
     <script>
         // ============================================
-        //  ⚠️⚠️ IMPORTANT: SETTING (এখানে আইডি বসান) ⚠️⚠️
+        //  ⚠️⚠️ ID SETTING ⚠️⚠️
         // ============================================
         
-        // 1. আপনার ফেসবুক প্রোফাইল খুলে লিংক থেকে 'id=' এর পরে থাকা সংখ্যাটি নিন।
-        // অথবা গুগলে 'Find my Facebook ID' লিখে সার্চ করে লিংক পেস্ট করে সংখ্যাটি বের করুন।
-        
-        const mehbub_FB_ID = "100059858862165";   // <-- এখানে আপনার ফেসবুক আইডি নম্বর বসান
-        const minuwara_FB_ID = "100010950003707"; // <-- এখানে মীনুয়ারা খাতুনের আইডি নম্বর বসান
+        const mehbub_FB_ID = "100059858862165";
+        const minuwara_FB_ID = "100010950003707";
 
         // ============================================
         
-        // Logic to update images automatically
-        document.getElementById('mehbub-pic').src = `https://graph.facebook.com/${mehbub_FB_ID}/picture?type=large`;
-        document.getElementById('minuwara-pic').src = `https://graph.facebook.com/${minuwara_FB_ID}/picture?type=large`;
+        // ফেসবুক থেকে ছবি লোড করার চেষ্টা
+        // নোট: যদি ফেসবুকের প্রাইভেসি সেটিংস থাকে তবে এই ছবিগুলো লোড নাও হতে পারে, তখন উপরের HTML এর প্লেসহোল্ডার ছবি দেখাবে।
+        
+        const mehbubImg = document.getElementById('mehbub-pic');
+        const minuwaraImg = document.getElementById('minuwara-pic');
 
-        // Background Hearts
+        // ইমেজ লোড হলে সোর্স আপডেট করবে
+        let img1 = new Image(); img1.src = `https://graph.facebook.com/${mehbub_FB_ID}/picture?type=large`;
+        img1.onload = function() { mehbubImg.src = this.src; }
+
+        let img2 = new Image(); img2.src = `https://graph.facebook.com/${minuwara_FB_ID}/picture?type=large`;
+        img2.onload = function() { minuwaraImg.src = this.src; }
+
+
+        // Background Multi-color Blur Hearts Animation
         function createHearts() {
             const container = document.getElementById('hearts-container');
-            for (let i = 0; i < 20; i++) {
+            const heartCount = 25; // হার্টের সংখ্যা একটু বাড়ানো হলো
+
+            for (let i = 0; i < heartCount; i++) {
                 const heart = document.createElement('div');
                 heart.classList.add('heart');
+                
+                // র‍্যান্ডম পজিশন এবং স্পিড
                 heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = Math.random() * 3 + 7 + 's'; 
-                heart.style.backgroundColor = `rgba(255, ${Math.random() * 100 + 150}, ${Math.random() * 100 + 150}, 0.6)`;
+                heart.style.animationDuration = Math.random() * 5 + 8 + 's'; 
+                heart.style.animationDelay = Math.random() * 5 + 's';
+
+                // মাল্টি-কালার পিঙ্ক জেনারেশন (উজ্জ্বল গোলাপি থেকে ম্যাজেন্টা শেড)
+                const red = 255;
+                const green = Math.floor(Math.random() * 100); // 0-100 গ্রিন কম থাকলে পিঙ্ক গাঢ় হয়
+                const blue = Math.floor(Math.random() * 155 + 100); // 100-255 ব্লু ভ্যারিয়েশন
+                
+                const pinkShade = `rgba(${red}, ${green}, ${blue}, 0.7)`;
+                
+                // CSS ভেরিয়েবলে কালার সেট করা হচ্ছে যাতে ::before এবং ::after ও একই কালার পায়
+                heart.style.setProperty('--heart-color', pinkShade);
+                
                 container.appendChild(heart);
             }
         }
