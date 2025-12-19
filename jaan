@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mehbub & Minuwara - A Love Story</title>
+    <style>
+        /* Resetting margins */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Noto Serif Bengali', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            color: #4a4a4a;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Floating Hearts Background */
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -100px;
+            width: 20px;
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.5);
+            transform: rotate(45deg);
+            animation: float 10s infinite ease-in;
+        }
+        
+        .heart::before, .heart::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+        }
+        .heart::before { top: -10px; left: 0; }
+        .heart::after { left: -10px; top: 0; }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(45deg); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) rotate(45deg); opacity: 0; }
+        }
+
+        /* Container Styling */
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px 20px;
+            margin: 50px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            border: 2px solid #fff;
+        }
+
+        /* --- NEW: Profile Header Area --- */
+        .profile-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px; /* Space between images and heart */
+            margin-bottom: 25px;
+        }
+
+        .profile-pic {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%; /* Makes it round */
+            border: 3px solid #d63384; /* Pink border */
+            padding: 2px; /* Space between border and image */
+            object-fit: cover; /* Ensures image doesn't stretch */
+            box-shadow: 0 4px 10px rgba(214, 51, 132, 0.3);
+            background-color: #fff;
+        }
+
+        .love-icon-small {
+            font-size: 3rem;
+            color: #ff4757;
+            animation: beat 1s infinite alternate;
+        }
+        /* -------------------------------- */
+
+        h1 {
+            font-family: 'Brush Script MT', cursive;
+            color: #d63384;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #c0392b;
+            font-size: 1.8rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #ff9a9e;
+            display: inline-block;
+            padding-bottom: 5px;
+            font-weight: bold;
+            font-family: 'Brush Script MT', cursive;
+        }
+
+        .section-title {
+            color: #c0392b;
+            font-size: 1.5rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #ff9a9e;
+            display: inline-block;
+            padding-bottom: 5px;
+            font-weight: bold;
+        }
+
+        p {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        .highlight {
+            color: #d63384;
+            font-weight: bold;
+            font-size: 1.25rem;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .bengali-poetry {
+            background-color: #fff0f5;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px dashed #d63384;
+            margin-top: 30px;
+        }
+
+        .bengali-text {
+            font-size: 1.4rem;
+            color: #880e4f;
+            line-height: 1.8;
+            font-weight: 600;
+            font-style: italic;
+        }
+
+        /* Footer & Glowing Effect */
+        .footer {
+            margin-top: 40px;
+            font-size: 1.1rem;
+            color: #777;
+        }
+
+        .glow-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff0055;
+            text-shadow: 0 0 5px #ff0055, 0 0 10px #ff0055, 0 0 20px #ff0055;
+            animation: glowing 2s infinite alternate;
+            display: block;
+            margin-top: 10px;
+            font-family: 'Brush Script MT', cursive;
+        }
+
+        @keyframes glowing {
+            from { text-shadow: 0 0 5px #ff0055, 0 0 10px #ff0055; transform: scale(1); }
+            to { text-shadow: 0 0 10px #ff0055, 0 0 20px #ff0055, 0 0 30px #ff3366; transform: scale(1.05); }
+        }
+
+        @keyframes beat {
+            to { transform: scale(1.1); }
+        }
+
+        /* Special Name Styling */
+        .names {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: -webkit-linear-gradient(#ff512f, #dd2476);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 20px 0;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="hearts" id="hearts-container"></div>
+
+    <div class="container">
+        
+        <div class="profile-header">
+            <img src="https://graph.facebook.com/100024184854552/picture?type=large" alt="Mehbub" class="profile-pic">
+            
+            <div class="love-icon-small">❤️</div>
+            
+            <img src="https://graph.facebook.com/100080438091285/picture?type=large" alt="Minuwara" class="profile-pic">
+        </div>
+        <h1>Our Love Story</h1>
+        
+        <div class="names">
+            Mehbub Ali &infin; Minuwara Khatun
+        </div>
+
+        <p>
+            তোমার কি মনে আছে আমাদের গল্পের শুরুটা হয়েছিল 
+            <span class="highlight">Facebook</span> থেকে?
+        </p>
+
+        <h2>Prio</h2>
+        <p>
+            মনে আছে সেই প্রথম মেসেজটা? <br>
+            আমি লিখেছিলাম: <span class="highlight">"MKK"</span>
+        </p>
+        <p>
+            তোমার <span class="highlight">Facebook ID</span>-তে নাম ছিল <em>"Minuwara Khatun Khatun"</em>. 
+            আমি সেটাকে শর্টকাট করে <span class="highlight">MKK</span> বানিয়ে দিয়েছিলাম। আমি যদি সেদিন তোমাকে <span class="highlight">MKK</span> মেসেজটা না দিতাম, তবে হয়তো তুমি <span class="highlight">Reply</span> করতে না, আর আমাদের দেখাও হতো না। 
+            <br>
+            <strong>সেই ছোট্ট "MKK" আজ আমার জীবনের সবচেয়ে সুন্দর ইত্তেফাক।</strong>
+        </p>
+
+        <div class="section-title">The Unseen Love</div>
+        <p>
+            সত্যি কথা জানো? আমি তোমাকে পাগলের মতো ভালোবাসি কিন্তু কোনদিনও প্রকাশ করিনি, হয়তো একটু করছি তাও তুমি বুঝতে চাওনি। আহারে আমার পাগল মনটা কতবারই না তোমার কাছে ছবি চেয়েছে, কিন্তু তুমি আজও দাওনি।
+        </p>
+        <p>
+            তুমি বলেছিলে—<em>"আমি <span class="highlight">Photo</span> দেব না, আমার সাথে <span class="highlight">Physically</span> দেখা করো। যেদিন দেখা হবে, সেদিন যত খুশি ছবি তুলে নিও।"</em>
+        </p>
+        <p>
+            আমি তোমার সাথে অনেকবার দেখা করার চেষ্টা করেছি, কিন্তু হয়তো উপরওয়ালার কখনো সেটা মঞ্জুর ই ছিল না, তাই আমাদের দেখাও হলো না। 
+            হয়তো ভবিষ্যতে দেখা হবে, আর যদি কপালে দেখা নাও থাকে, প্লিজ তুমি আমাকে কোনোদিন ভুলো না।
+        </p>
+        
+        <p style="color: #d63384; font-weight: 500;">
+            আমি তোমাকে পৃথিবীর সবচাইতে সবার চাইতে বেশি অনেক অনেক অনেক অনেক অনেক অনেক অনেক অনেক অনেক অনেক অনেক অনেক অনেক ভালোবাসি।
+            <br><br>
+            আকাশের যতগুলো না তারা আছে তার চাইতেও তোমাকে বেশি ভালোবাসি। সাগরে যতটুকু পানি আছে তার চাইতেও তোমাকে বেশি ভালোবাসি। এই পৃথিবীতে যতগুলো ধূলিকণা আছে তার চাইতেও তোমাকে বেশি ভালোবাসি। তুমি যতবার তোমার চোখের পলক ফেলো আমি ততবারই তোমাকে ভালোবাসি।
+        </p>
+
+        <div class="bengali-poetry">
+            <p style="font-size: 1rem; color: #d63384; margin-bottom: 10px;">For you, My MKK:</p>
+            <div class="bengali-text">
+                "তোমায় না দেখেই ভালোবেসেছি,<br>
+                হৃদয়ের মাঝে তোমার ছবি এঁকেছি।<br>
+                তুমি আমার প্রথম প্রেম, তুমিই শেষ আশা,<br>
+                MKK নামেই অমর হোক আমাদের ভালোবাসা।"
+            </div>
+        </div>
+
+        <div class="footer">
+            Forever yours,<br>
+            <span class="glow-name">Mehbub Ali</span>
+        </div>
+    </div>
+
+    <script>
+        // Generating floating hearts
+        function createHearts() {
+            const container = document.getElementById('hearts-container');
+            const heartCount = 20;
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = Math.random() * 3 + 7 + 's'; 
+                heart.style.backgroundColor = `rgba(255, ${Math.random() * 100 + 150}, ${Math.random() * 100 + 150}, 0.6)`;
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+    </script>
+</body>
+</html>
