@@ -11,16 +11,10 @@
     <style>
         /* --- GLOBAL --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
-            font-family: 'Quicksand', sans-serif; background: #000;
-        }
+        body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: 'Quicksand', sans-serif; background: #000; }
 
-        /* --- BACKGROUND HEARTS --- */
-        .bg-container {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -2; overflow: hidden; background: #050505;
-        }
+        /* --- BACKGROUND --- */
+        .bg-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; overflow: hidden; background: #050505; }
         .glowing-heart {
             position: absolute; bottom: -100px; font-size: 30px; opacity: 0;
             animation: floatUpZoom linear infinite;
@@ -33,62 +27,50 @@
             100% { transform: translateY(-120vh) scale(0.8); opacity: 0; }
         }
 
-        /* --- APP CONTAINER --- */
+        /* --- CONTAINER --- */
         .app-container {
             display: flex; flex-direction: column; width: 100%; max-width: 500px;
             height: 100dvh; margin: 0 auto; position: relative;
             background: rgba(0, 0, 0, 0.3);
-            border-left: 1px solid rgba(255,255,255,0.1);
-            border-right: 1px solid rgba(255,255,255,0.1);
+            border-left: 1px solid rgba(255,255,255,0.1); border-right: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* --- TRANSITION --- */
         .fade-transition { transition: opacity 1.5s ease-in-out; }
         .hidden-opacity { opacity: 0; pointer-events: none; }
 
-        /* --- LOGIN PAGE --- */
+        /* --- LOGIN --- */
         #login-view {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 50;
             background: rgba(15, 5, 10, 0.95);
             display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 30px;
         }
         .title-font { 
-            font-family: 'Dancing Script', cursive; color: white;
-            margin-bottom: 30px; text-align: center;
-            text-shadow: 0 0 10px rgba(255, 65, 108, 0.5);
-            white-space: nowrap; font-size: clamp(2rem, 7vw, 3.5rem); 
+            font-family: 'Dancing Script', cursive; color: white; margin-bottom: 30px; text-align: center;
+            text-shadow: 0 0 10px rgba(255, 65, 108, 0.5); white-space: nowrap; font-size: clamp(2rem, 7vw, 3.5rem); 
         }
-        .title-heart {
-            display: inline-block; animation: heartBeatSlow 3s infinite ease-in-out;
-            filter: drop-shadow(0 0 8px red);
-        }
+        .title-heart { display: inline-block; animation: heartBeatSlow 3s infinite ease-in-out; filter: drop-shadow(0 0 8px red); }
         @keyframes heartBeatSlow { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); filter: drop-shadow(0 0 20px red); } }
 
         .glass-input {
-            width: 100%; padding: 18px; margin: 20px 0;
-            border: 2px solid rgba(255,255,255,0.3); border-radius: 30px;
-            font-size: 1.2rem; outline: none; text-align: center;
-            background: rgba(255, 255, 255, 0.1); color: white; letter-spacing: 3px;
+            width: 100%; padding: 18px; margin: 20px 0; border: 2px solid rgba(255,255,255,0.3); border-radius: 30px;
+            font-size: 1.2rem; outline: none; text-align: center; background: rgba(255, 255, 255, 0.1); color: white; letter-spacing: 3px;
             font-family: 'Quicksand', sans-serif; transition: 0.3s;
         }
         .glass-input:focus { border-color: #ff416c; box-shadow: 0 0 20px rgba(255, 65, 108, 0.5) inset; }
 
         .btn-cool-glow {
-            width: 100%; padding: 18px; border: none; border-radius: 30px;
-            color: white; font-size: 1.3rem; font-weight: bold; cursor: pointer; margin-top: 20px;
+            width: 100%; padding: 18px; border: none; border-radius: 30px; color: white; font-size: 1.3rem; font-weight: bold; cursor: pointer; margin-top: 20px;
             background: linear-gradient(45deg, #ff416c, #ff4b2b, #ff416c); background-size: 200% auto;
-            animation: gradientMove 3s linear infinite, pulseBtn 2s infinite;
-            box-shadow: 0 0 20px rgba(255, 65, 108, 0.6);
+            animation: gradientMove 3s linear infinite, pulseBtn 2s infinite; box-shadow: 0 0 20px rgba(255, 65, 108, 0.6);
         }
         @keyframes gradientMove { 0% {background-position: 0% center;} 100% {background-position: 200% center;} }
         @keyframes pulseBtn { 0% {transform: scale(1);} 50% {transform: scale(1.02); box-shadow: 0 0 40px rgba(255, 65, 108, 0.8);} 100% {transform: scale(1);} }
 
-        /* --- CHAT PAGE --- */
+        /* --- CHAT VIEW --- */
         #chat-view { display: flex; }
 
         .chat-header {
-            flex-shrink: 0; height: 90px; background: rgba(0, 0, 0, 0.6);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            flex-shrink: 0; height: 90px; background: rgba(0, 0, 0, 0.6); border-bottom: 1px solid rgba(255,255,255,0.1);
             display: flex; align-items: center; justify-content: space-between; padding: 0 15px;
         }
         .header-title { font-family: 'Dancing Script', cursive; font-size: 1.8rem; color: white; margin: 0; }
@@ -114,6 +96,20 @@
         .msg.received { align-self: flex-start; background: rgba(255, 255, 255, 0.15); border-bottom-left-radius: 4px; border: 1px solid rgba(255,255,255,0.2); }
         .msg-time { font-size: 0.65rem; text-align: right; margin-top: 5px; opacity: 0.7; }
 
+        /* --- TYPING INDICATOR --- */
+        .typing-indicator {
+            align-self: flex-start; background: rgba(255, 255, 255, 0.1); padding: 10px 15px;
+            border-radius: 20px; font-size: 0.8rem; color: #ccc; display: none; /* Hidden by default */
+            align-items: center; gap: 5px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .typing-dots span {
+            width: 5px; height: 5px; background: #fff; border-radius: 50%; display: inline-block;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+
         .chat-footer { flex-shrink: 0; padding: 15px; background: rgba(0, 0, 0, 0.5); border-top: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px; padding-bottom: env(safe-area-inset-bottom, 15px); }
         #msg-input { flex: 1; padding: 14px; border-radius: 30px; border: none; background: rgba(255, 255, 255, 0.2); outline: none; font-size: 1rem; color: white; }
         .send-btn { width: 50px; height: 50px; border-radius: 50%; background: white; color: #ff416c; border: none; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(255,255,255,0.3); transition: 0.3s; }
@@ -122,8 +118,12 @@
 </head>
 <body>
 
-    <audio id="snd-send" src="https://cdn.pixabay.com/audio/2022/11/02/audio_8b05625c27.mp3"></audio>
-    <audio id="snd-receive" src="https://cdn.pixabay.com/audio/2022/03/10/audio_c13a2901a0.mp3"></audio>
+    <audio id="snd-send" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="snd-receive" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
+    </audio>
 
     <div class="bg-container" id="hearts-bg"></div>
 
@@ -147,7 +147,12 @@
                 <img src="https://friend-4ever.github.io/Minuwara/mee.png" alt="Logo" class="custom-logo">
             </div>
 
-            <div class="chat-body" id="msg-container"></div>
+            <div class="chat-body" id="msg-container">
+                <div class="typing-indicator" id="typing-bubble">
+                    <span id="typing-text">Partner is typing</span>
+                    <div class="typing-dots"><span></span><span></span><span></span></div>
+                </div>
+            </div>
 
             <div class="chat-footer">
                 <input type="text" id="msg-input" placeholder="Write message..." autocomplete="off">
@@ -160,30 +165,34 @@
         const BROKER = "broker.emqx.io"; const PORT = 8084; const PATH = "/mqtt";
         const CHAT_TOPIC = "love_chat_room_v786_msg";
         const PRESENCE_TOPIC_BASE = "love_chat_presence_v786/";
-        const STORAGE_KEY = "love_chat_v4_history";
+        const TYPING_TOPIC_BASE = "love_chat_typing_v786/";
+        const STORAGE_KEY = "love_chat_v5_history";
 
         let client; let myName = ""; let myID = ""; let partnerID = "";
-        let lastPingTime = 0; let onlineCheckInterval;
-        let lastSeenTimestamp = "";
+        let lastPingTime = 0; let onlineCheckInterval; let lastSeenTimestamp = "";
+        let typingTimeout;
 
-        // --- AUDIO HELPERS ---
-        function playSendSound() {
-            const audio = document.getElementById('snd-send');
-            audio.currentTime = 0;
-            audio.play().catch(e => console.log("Audio Error", e));
+        // --- SOUND UNLOCK & PLAY ---
+        function unlockAudio() {
+            // Browsers block audio until user interaction. 
+            // We play and pause instantly on Login Click to unlock it.
+            const s1 = document.getElementById('snd-send');
+            const s2 = document.getElementById('snd-receive');
+            s1.play().then(() => s1.pause()).catch(() => {});
+            s2.play().then(() => s2.pause()).catch(() => {});
         }
 
-        function playReceiveSound() {
-            const audio = document.getElementById('snd-receive');
+        function playSound(type) {
+            const audio = document.getElementById(type === 'send' ? 'snd-send' : 'snd-receive');
             audio.currentTime = 0;
-            audio.play().catch(e => console.log("Audio Error", e));
+            audio.play().catch(e => console.log("Sound blocked, interact first"));
         }
 
         function attemptLogin() {
+            unlockAudio(); // Important step!
             const code = document.getElementById('secret-code').value.trim();
             const err = document.getElementById('error-msg');
 
-            // --- PINS: 786 & 321 ---
             if(code === "786") { 
                 myName="Minuwara Khatun"; myID="786"; partnerID="321"; 
                 document.getElementById('partner-name').innerText="Mehbub Ali"; 
@@ -220,9 +229,20 @@
         function onConnect() {
             client.subscribe(CHAT_TOPIC);
             client.subscribe(PRESENCE_TOPIC_BASE + partnerID);
+            client.subscribe(TYPING_TOPIC_BASE + partnerID); // Listen for partner typing
             startHeartbeat();
         }
 
+        // --- TYPING INDICATOR LOGIC ---
+        const msgInput = document.getElementById('msg-input');
+        msgInput.addEventListener('input', () => {
+            // Send "I am typing"
+            const message = new Paho.MQTT.Message("typing");
+            message.destinationName = TYPING_TOPIC_BASE + myID;
+            client.send(message);
+        });
+
+        // --- ONLINE LOGIC ---
         function startHeartbeat() {
             setInterval(() => {
                 const message = new Paho.MQTT.Message("online");
@@ -231,77 +251,109 @@
             }, 2000); 
             onlineCheckInterval = setInterval(checkPartnerStatus, 3000);
         }
-
         function checkPartnerStatus() {
-            if (Date.now() - lastPingTime > 5000) {
-                setOffline();
-            }
+            if (Date.now() - lastPingTime > 5000) setOffline();
         }
-
         function setOnline() {
             const badge=document.getElementById('status-display'); const dot=document.getElementById('status-dot'); const text=document.getElementById('status-text');
             badge.classList.remove('status-offline'); badge.classList.add('status-online');
-            dot.classList.remove('dot-offline'); dot.classList.add('dot-online'); 
-            text.innerText = "Online";
+            dot.classList.remove('dot-offline'); dot.classList.add('dot-online'); text.innerText = "Online";
         }
-
         function setOffline() {
             const badge=document.getElementById('status-display'); const dot=document.getElementById('status-dot'); const text=document.getElementById('status-text');
             badge.classList.remove('status-online'); badge.classList.add('status-offline');
             dot.classList.remove('dot-online'); dot.classList.add('dot-offline'); 
-            if(lastSeenTimestamp) text.innerText = "Last seen: " + lastSeenTimestamp;
-            else text.innerText = "Offline";
+            text.innerText = lastSeenTimestamp ? "Last seen: " + lastSeenTimestamp : "Offline";
         }
 
         function sendMsg() {
-            const input = document.getElementById('msg-input');
-            const txt = input.value.trim(); if(!txt) return;
+            const txt = msgInput.value.trim(); if(!txt) return;
             const timeNow = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+            
             const payload = JSON.stringify({ type:'chat', sender:myName, text:txt, time:timeNow });
             const message = new Paho.MQTT.Message(payload);
             message.destinationName = CHAT_TOPIC; client.send(message);
             
-            // Render + Save + Play Sound
             renderMessage(myName, txt, timeNow, true); 
             saveToHistory(myName, txt, timeNow);
-            playSendSound(); // PLAY SEND SOUND
+            playSound('send'); // Sound
 
-            input.value = ""; input.focus();
+            msgInput.value = ""; msgInput.focus();
         }
 
         function onMessageArrived(msg) {
             const topic = msg.destinationName;
             
+            // 1. PRESENCE
             if (topic === PRESENCE_TOPIC_BASE + partnerID) { 
                 lastPingTime = Date.now(); 
                 lastSeenTimestamp = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-                setOnline(); 
-                return; 
+                setOnline(); return; 
             }
 
+            // 2. TYPING
+            if (topic === TYPING_TOPIC_BASE + partnerID) {
+                showTyping(); return;
+            }
+
+            // 3. CHAT
             if (topic === CHAT_TOPIC) {
                 try { const data = JSON.parse(msg.payloadString);
                     if (data.type === 'chat' && data.sender !== myName) {
-                        // Render + Save + Play Sound
+                        hideTyping(); // Hide typing if msg arrived
                         renderMessage(data.sender, data.text, data.time, true); 
                         saveToHistory(data.sender, data.text, data.time);
-                        playReceiveSound(); // PLAY RECEIVE SOUND
+                        playSound('receive'); // Sound
                     }
                 } catch(e) {}
             }
         }
 
+        function showTyping() {
+            const bubble = document.getElementById('typing-bubble');
+            const text = document.getElementById('typing-text');
+            const partnerFirstName = document.getElementById('partner-name').innerText.split(' ')[0];
+            text.innerText = partnerFirstName + " is typing...";
+            
+            bubble.style.display = 'flex';
+            // Auto hide after 2 seconds if no new typing signal
+            clearTimeout(typingTimeout);
+            typingTimeout = setTimeout(hideTyping, 2000);
+            
+            // Scroll to bottom to show typing
+            const container = document.getElementById('msg-container');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function hideTyping() {
+            document.getElementById('typing-bubble').style.display = 'none';
+        }
+
         function renderMessage(sender, text, time, animate) {
-            const container = document.getElementById('msg-container'); const div = document.createElement('div'); const isMe = (sender === myName);
+            const container = document.getElementById('msg-container');
+            const bubble = document.getElementById('typing-bubble'); // Get bubble to insert before it
+            const div = document.createElement('div'); const isMe = (sender === myName);
             div.className = `msg ${isMe ? 'sent' : 'received'}`; if(!animate) div.style.animation = "none";
             div.innerHTML = `${text} <div class="msg-time">${time}</div>`;
-            container.appendChild(div); container.scrollTop = container.scrollHeight;
+            
+            // Insert before typing bubble so bubble stays at bottom
+            container.insertBefore(div, bubble);
+            container.scrollTop = container.scrollHeight;
         }
 
         function loadHistory() {
-            const container = document.getElementById('msg-container'); container.innerHTML = "";
+            const container = document.getElementById('msg-container'); 
+            const bubble = document.getElementById('typing-bubble');
+            // Remove old msgs (keep bubble)
+            while(container.firstChild && container.firstChild !== bubble) {
+                container.removeChild(container.firstChild);
+            }
+
             const history = localStorage.getItem(STORAGE_KEY);
-            if(history) { JSON.parse(history).forEach(m => renderMessage(m.sender, m.text, m.time, false)); container.scrollTop = container.scrollHeight; }
+            if(history) { 
+                JSON.parse(history).forEach(m => renderMessage(m.sender, m.text, m.time, false)); 
+                container.scrollTop = container.scrollHeight; 
+            }
         }
         function saveToHistory(sender, text, time) {
             let history = localStorage.getItem(STORAGE_KEY); let msgs = history ? JSON.parse(history) : [];
@@ -318,8 +370,7 @@
             heart.style.animationDuration = (Math.random() * 15 + 20) + 's'; 
             const hue = Math.floor(Math.random() * 360);
             heart.style.color = `hsl(${hue}, 80%, 60%)`; 
-            container.appendChild(heart); 
-            setTimeout(() => heart.remove(), 35000);
+            container.appendChild(heart); setTimeout(() => heart.remove(), 35000);
         }
         setInterval(createHearts, 1000); 
     </script>
