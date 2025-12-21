@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Mehbub ❤️ Minuwara</title>
+    <title>Mehbub ❤️ Minuwara - Forever Chat</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
 
@@ -14,25 +14,25 @@
         html, body {
             margin: 0; padding: 0;
             width: 100%; height: 100%;
-            overflow: hidden; /* Page ko scroll hone se rokega */
+            overflow: hidden;
             font-family: 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #fff0f5 0%, #ffe6e6 100%);
         }
 
-        /* --- LAYOUT CONTAINER (FLEXBOX) --- */
+        /* --- APP CONTAINER --- */
         .app-container {
             display: flex;
             flex-direction: column;
             width: 100%;
-            max-width: 500px; /* Tablet/Desktop par zyada chouda na ho */
-            height: 100dvh; /* Dynamic Height for Mobile Browsers */
-            margin: 0 auto; /* Center in Desktop */
+            max-width: 500px;
+            height: 100dvh; /* Mobile Full Height */
+            margin: 0 auto;
             background: #fff;
             position: relative;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
 
-        /* BACKGROUND HEARTS */
+        /* HEARTS BACKGROUND */
         .hearts-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1; overflow: hidden; pointer-events: none;
@@ -54,52 +54,47 @@
         .input-style {
             width: 100%; padding: 15px; margin: 10px 0;
             border: 2px solid #ffdee9; border-radius: 12px;
-            font-size: 1rem; outline: none;
+            font-size: 1rem; outline: none; background: #fffbfc;
         }
         .btn-main {
             width: 100%; padding: 15px; border: none; border-radius: 30px;
-            background: #ff416c; color: white; font-size: 1.1rem;
+            background: linear-gradient(to right, #ff416c, #ff4b2b); 
+            color: white; font-size: 1.1rem; font-weight: bold;
             margin-top: 10px; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255,65,108,0.3);
         }
 
-        /* --- CHAT SCREEN STRUCTURE --- */
+        /* --- CHAT SCREEN --- */
         #chat-view {
-            display: none; /* JS se Flex hoga */
-            flex-direction: column;
-            height: 100%;
-            width: 100%;
+            display: none; flex-direction: column; height: 100%; width: 100%;
         }
 
-        /* 1. HEADER (Fixed Top) */
         .chat-header {
-            flex-shrink: 0; /* Shrink nahi hoga */
-            height: 60px;
-            background: white;
+            flex-shrink: 0; height: 65px; background: white;
             border-bottom: 1px solid #f0f0f0;
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            z-index: 10;
+            padding: 0 15px; z-index: 10;
         }
         .partner-info h3 { margin: 0; font-size: 1.1rem; color: #333; }
-        .status-txt { font-size: 0.75rem; color: #888; }
+        .status-txt { font-size: 0.75rem; color: #888; display: flex; align-items: center; gap: 5px; }
+        .online-dot { width: 8px; height: 8px; background: #ccc; border-radius: 50%; }
+        .online-dot.active { background: #00c853; box-shadow: 0 0 5px #00c853; }
 
-        /* 2. MESSAGES LIST (Scrollable Area) */
         .chat-body {
-            flex-grow: 1; /* Bachi hui jagah lega */
-            overflow-y: auto; /* Sirf ye area scroll karega */
-            padding: 15px;
+            flex-grow: 1; overflow-y: auto; padding: 15px;
             background: #fafafa;
             display: flex; flex-direction: column; gap: 10px;
-            -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
+            scroll-behavior: smooth;
         }
 
-        /* Messages Styles */
         .msg {
             max-width: 80%; padding: 10px 14px; border-radius: 16px;
             font-size: 0.95rem; line-height: 1.4; position: relative;
             word-wrap: break-word;
+            animation: fadeIn 0.3s ease;
         }
+        @keyframes fadeIn { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+
         .msg.sent {
             align-self: flex-end; background: #ff416c; color: white;
             border-bottom-right-radius: 4px;
@@ -107,22 +102,18 @@
         .msg.received {
             align-self: flex-start; background: white; color: #333;
             border: 1px solid #eee; border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
         }
         .msg-time {
             font-size: 0.65rem; text-align: right; margin-top: 3px; opacity: 0.7;
         }
 
-        /* 3. INPUT AREA (Fixed Bottom) */
         .chat-footer {
-            flex-shrink: 0; /* Shrink nahi hoga */
-            background: white;
-            padding: 10px;
+            flex-shrink: 0; background: white; padding: 10px;
             border-top: 1px solid #eee;
             display: flex; align-items: center; gap: 10px;
-            /* Safe area for iPhone X and newer */
             padding-bottom: env(safe-area-inset-bottom, 10px);
         }
-
         #msg-input {
             flex: 1; padding: 12px; border-radius: 24px;
             border: 1px solid #ddd; background: #f5f5f5;
@@ -144,8 +135,8 @@
     <div class="app-container">
         
         <div id="login-view">
-            <h2 style="color:#ff416c; margin-bottom:5px;">Love Connection ❤️</h2>
-            <p style="color:#666; margin-bottom:20px;">Apni pehchan batao</p>
+            <h2 style="color:#ff416c; margin-bottom:5px;">Love Archive ❤️</h2>
+            <p style="color:#666; margin-bottom:20px;">Messages hamesha save rahenge</p>
 
             <select id="user-select" class="input-style">
                 <option value="Mehbub Ali">👨 Mehbub Ali</option>
@@ -154,7 +145,7 @@
 
             <input type="number" id="secret-code" class="input-style" placeholder="Enter Secret Code (e.g. 786)" inputmode="numeric">
             
-            <button class="btn-main" onclick="connect()">Start Chatting</button>
+            <button class="btn-main" onclick="connect()">Enter Chat</button>
             <p id="status-msg" style="color:red; font-size:0.9rem; margin-top:10px; display:none;"></p>
         </div>
 
@@ -162,19 +153,18 @@
             <div class="chat-header">
                 <div class="partner-info">
                     <h3 id="partner-name">Partner</h3>
-                    <div class="status-txt" id="conn-status">Waiting to connect...</div>
+                    <div class="status-txt">
+                        <span class="online-dot" id="dot"></span> 
+                        <span id="conn-status">Connecting...</span>
+                    </div>
                 </div>
-                <div style="font-size:1.5rem;">💕</div>
+                <i class="fas fa-trash" onclick="clearHistory()" style="color:#ddd; cursor:pointer;" title="Clear Chat"></i>
             </div>
 
-            <div class="chat-body" id="msg-container">
-                <div style="text-align:center; color:#ccc; font-size:0.8rem; margin-top:20px;">
-                    Messages are private and secure 🔒
-                </div>
-            </div>
+            <div class="chat-body" id="msg-container"></div>
 
             <div class="chat-footer">
-                <input type="text" id="msg-input" placeholder="Type here..." autocomplete="off">
+                <input type="text" id="msg-input" placeholder="Message..." autocomplete="off">
                 <button class="send-btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
             </div>
         </div>
@@ -182,16 +172,18 @@
     </div>
 
     <script>
-        // SERVER CONFIG (SECURE)
+        // CONFIG
         const BROKER = "broker.emqx.io";
         const PORT = 8084;
         const PATH = "/mqtt";
 
         let client;
         let myName = "";
+        let secretCode = "";
         let topic = "";
+        let storageKey = ""; // Key to save data in browser
 
-        // 1. CONNECT
+        // 1. CONNECT & LOAD HISTORY
         function connect() {
             const user = document.getElementById('user-select').value;
             const code = document.getElementById('secret-code').value.trim();
@@ -199,19 +191,21 @@
 
             if(!code) {
                 statusMsg.style.display = 'block';
-                statusMsg.innerText = "Please enter a code!";
+                statusMsg.innerText = "Secret Code daalo!";
                 return;
             }
 
             statusMsg.style.display = 'block';
             statusMsg.style.color = 'orange';
-            statusMsg.innerText = "Connecting...";
+            statusMsg.innerText = "History Load ho rahi hai...";
 
             myName = user;
-            topic = "love_chat_app/" + code;
+            secretCode = code;
+            topic = "love_chat_perm_v3/" + code;
+            storageKey = "chat_history_" + code; // Unique key for this couple
 
+            // MQTT Client Setup
             const clientId = "chat_" + Math.random().toString(16).substr(2, 8);
-            
             client = new Paho.MQTT.Client(BROKER, PORT, PATH, clientId);
 
             client.onConnectionLost = onConnectionLost;
@@ -222,7 +216,7 @@
                 onSuccess: onConnect,
                 onFailure: (e) => {
                     statusMsg.style.color = 'red';
-                    statusMsg.innerText = "Failed: Check Internet";
+                    statusMsg.innerText = "Network Error!";
                 }
             });
         }
@@ -236,58 +230,128 @@
             const partner = (myName === "Mehbub Ali") ? "Minuwara Khatun" : "Mehbub Ali";
             document.getElementById('partner-name').innerText = partner;
             document.getElementById('conn-status').innerText = "Online";
-            document.getElementById('conn-status').style.color = "#00c853";
+            document.getElementById('dot').classList.add('active');
 
             client.subscribe(topic);
+
+            // LOAD OLD MESSAGES FROM BROWSER MEMORY
+            loadHistory();
         }
 
-        function onConnectionLost(responseObject) {
-            if (responseObject.errorCode !== 0) {
-                document.getElementById('conn-status').innerText = "Reconnecting...";
-                document.getElementById('conn-status').style.color = "red";
+        // 2. STORAGE SYSTEM (The Magic)
+        function loadHistory() {
+            const container = document.getElementById('msg-container');
+            container.innerHTML = ""; // Clear first
+            
+            // Get data from Browser LocalStorage
+            const history = localStorage.getItem(storageKey);
+            
+            if (history) {
+                const messages = JSON.parse(history);
+                messages.forEach(msg => {
+                    renderMessage(msg.sender, msg.text, msg.time, false);
+                });
+                // Add a small divider
+                const divider = document.createElement('div');
+                divider.innerHTML = "<small style='color:#ccc'>--- Stored Messages ---</small>";
+                divider.style.textAlign = 'center';
+                divider.style.margin = '10px 0';
+                container.appendChild(divider);
+                
+                container.scrollTop = container.scrollHeight;
+            } else {
+                const intro = document.createElement('div');
+                intro.style.textAlign = 'center';
+                intro.style.color = '#ccc';
+                intro.style.marginTop = '20px';
+                intro.style.fontSize = '0.8rem';
+                intro.innerText = "Chat securely stored on this device 🔒";
+                container.appendChild(intro);
             }
         }
 
-        // 2. SEND MESSAGE
+        function saveToHistory(sender, text, time) {
+            // Get current list
+            let history = localStorage.getItem(storageKey);
+            let messages = history ? JSON.parse(history) : [];
+
+            // Add new message
+            messages.push({ sender: sender, text: text, time: time });
+
+            // Save back to browser
+            localStorage.setItem(storageKey, JSON.stringify(messages));
+        }
+
+        function clearHistory() {
+            if(confirm("Kya saari purani chat delete karni hai?")) {
+                localStorage.removeItem(storageKey);
+                document.getElementById('msg-container').innerHTML = "";
+                alert("History Cleared!");
+            }
+        }
+
+        // 3. SEND & RECEIVE
         function sendMsg() {
             const input = document.getElementById('msg-input');
             const txt = input.value.trim();
             if(!txt) return;
 
+            const timeNow = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            // 1. Send to Server (for Partner)
             const payload = JSON.stringify({
                 sender: myName,
                 text: txt,
-                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                time: timeNow
             });
-
             const message = new Paho.MQTT.Message(payload);
             message.destinationName = topic;
             client.send(message);
 
+            // 2. Show on My Screen & Save Locally
+            renderMessage(myName, txt, timeNow, true); // true = animate
+            saveToHistory(myName, txt, timeNow);
+
             input.value = "";
-            input.focus(); // Keep keyboard open
+            input.focus();
         }
 
-        // Enter Key Support
-        document.getElementById('msg-input').addEventListener("keypress", function(event) {
-            if (event.key === "Enter") sendMsg();
-        });
-
-        // 3. RECEIVE MESSAGE
         function onMessageArrived(msg) {
             const data = JSON.parse(msg.payloadString);
+            
+            // Agar message mera nahi hai (partner ka hai)
+            if (data.sender !== myName) {
+                renderMessage(data.sender, data.text, data.time, true);
+                // Save partner's message to my history
+                saveToHistory(data.sender, data.text, data.time);
+            }
+        }
+
+        function renderMessage(sender, text, time, animate) {
             const container = document.getElementById('msg-container');
             const div = document.createElement('div');
             
-            const isMe = (data.sender === myName);
+            const isMe = (sender === myName);
             div.className = `msg ${isMe ? 'sent' : 'received'}`;
-            div.innerHTML = `${data.text} <div class="msg-time">${data.time}</div>`;
+            if(!animate) div.style.animation = "none"; // Purane msg animation ke bina
+            
+            div.innerHTML = `${text} <div class="msg-time">${time}</div>`;
 
             container.appendChild(div);
-            
-            // Auto Scroll to Bottom
             container.scrollTop = container.scrollHeight;
         }
+
+        function onConnectionLost(responseObject) {
+            if (responseObject.errorCode !== 0) {
+                document.getElementById('conn-status').innerText = "Offline";
+                document.getElementById('dot').classList.remove('active');
+            }
+        }
+
+        // Enter Key
+        document.getElementById('msg-input').addEventListener("keypress", function(event) {
+            if (event.key === "Enter") sendMsg();
+        });
 
         // Hearts Animation
         setInterval(() => {
@@ -298,7 +362,7 @@
             h.style.animationDuration = Math.random() * 3 + 3 + 's';
             document.getElementById('bg-hearts').appendChild(h);
             setTimeout(() => h.remove(), 6000);
-        }, 800);
+        }, 1000);
 
     </script>
 </body>
