@@ -3,168 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Mehbub ❤️ Minuwara - Forever Chat</title>
+    <title>Mehbub & Minuwara Love World</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
 
     <style>
-        /* --- CSS RESET & MOBILE OPTIMIZATION --- */
+        /* --- PREMIUM ROMANTIC THEME (CSS) --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        html, body {
+        body {
             margin: 0; padding: 0;
             width: 100%; height: 100%;
             overflow: hidden;
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #fff0f5 0%, #ffe6e6 100%);
+            font-family: 'Quicksand', sans-serif;
+            /* Animated Gradient Background */
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #ffdde1);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        /* --- APP CONTAINER --- */
+        /* GLASSMORPHISM CONTAINER */
         .app-container {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            max-width: 500px;
-            height: 100dvh; /* Mobile Full Height */
-            margin: 0 auto;
-            background: #fff;
+            display: flex; flex-direction: column;
+            width: 100%; max-width: 500px;
+            height: 100dvh; margin: 0 auto;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px); /* Frosted Glass Effect */
+            -webkit-backdrop-filter: blur(10px);
             position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+            border-left: 1px solid rgba(255,255,255,0.4);
+            border-right: 1px solid rgba(255,255,255,0.4);
         }
 
-        /* HEARTS BACKGROUND */
-        .hearts-bg {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; overflow: hidden; pointer-events: none;
+        /* --- MAGIC TOUCH HEARTS --- */
+        .magic-heart {
+            position: absolute; pointer-events: none; z-index: 9999;
+            animation: flyUp 1s ease-out forwards;
+            font-size: 20px;
         }
-        .heart {
-            position: absolute; bottom: -50px; font-size: 20px; color: rgba(255, 65, 108, 0.2);
-            animation: float 6s linear infinite;
+        @keyframes flyUp {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+            100% { transform: translate(-50%, -150px) scale(1.5); opacity: 0; }
         }
-        @keyframes float { to { transform: translateY(-110vh); opacity: 0; } }
 
-        /* --- LOGIN SCREEN --- */
+        /* --- LOGIN VIEW --- */
         #login-view {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #fff; z-index: 20;
+            background: rgba(255, 255, 255, 0.85);
+            z-index: 20;
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
             padding: 30px;
         }
-        .input-style {
-            width: 100%; padding: 15px; margin: 10px 0;
-            border: 2px solid #ffdee9; border-radius: 12px;
-            font-size: 1rem; outline: none; background: #fffbfc;
+        .title-font { font-family: 'Dancing Script', cursive; font-size: 3rem; color: #ff416c; margin-bottom: 0; }
+        
+        .glass-input {
+            width: 100%; padding: 15px; margin: 12px 0;
+            border: 2px solid white; border-radius: 20px;
+            font-size: 1rem; outline: none;
+            background: rgba(255, 255, 255, 0.6);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+            font-family: 'Quicksand', sans-serif;
         }
-        .btn-main {
+        .btn-heart {
             width: 100%; padding: 15px; border: none; border-radius: 30px;
-            background: linear-gradient(to right, #ff416c, #ff4b2b); 
-            color: white; font-size: 1.1rem; font-weight: bold;
-            margin-top: 10px; cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255,65,108,0.3);
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
+            color: white; font-size: 1.2rem; font-weight: bold; cursor: pointer;
+            margin-top: 15px; box-shadow: 0 5px 15px rgba(255, 117, 140, 0.4);
+            transition: transform 0.2s;
         }
+        .btn-heart:active { transform: scale(0.95); }
 
-        /* --- CHAT SCREEN --- */
-        #chat-view {
-            display: none; flex-direction: column; height: 100%; width: 100%;
-        }
+        /* --- CHAT VIEW --- */
+        #chat-view { display: none; flex-direction: column; height: 100%; width: 100%; }
 
+        /* Header */
         .chat-header {
-            flex-shrink: 0; height: 65px; background: white;
-            border-bottom: 1px solid #f0f0f0;
+            flex-shrink: 0; height: 70px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid rgba(255,255,255,0.5);
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 15px; z-index: 10;
+            padding: 0 20px; z-index: 10;
         }
-        .partner-info h3 { margin: 0; font-size: 1.1rem; color: #333; }
-        .status-txt { font-size: 0.75rem; color: #888; display: flex; align-items: center; gap: 5px; }
-        .online-dot { width: 8px; height: 8px; background: #ccc; border-radius: 50%; }
-        .online-dot.active { background: #00c853; box-shadow: 0 0 5px #00c853; }
+        .header-title { font-family: 'Dancing Script', cursive; font-size: 1.8rem; color: #333; margin: 0; }
+        .music-btn {
+            background: white; border: none; width: 40px; height: 40px;
+            border-radius: 50%; color: #ff416c; cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); font-size: 1rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .music-btn.playing { animation: spinDisk 3s linear infinite; background: #ff416c; color: white; }
+        @keyframes spinDisk { 0% {transform: rotate(0deg);} 100% {transform: rotate(360deg);} }
 
+        /* Messages Body */
         .chat-body {
-            flex-grow: 1; overflow-y: auto; padding: 15px;
-            background: #fafafa;
-            display: flex; flex-direction: column; gap: 10px;
+            flex-grow: 1; overflow-y: auto; padding: 20px;
+            display: flex; flex-direction: column; gap: 12px;
             scroll-behavior: smooth;
         }
-
+        
         .msg {
-            max-width: 80%; padding: 10px 14px; border-radius: 16px;
-            font-size: 0.95rem; line-height: 1.4; position: relative;
-            word-wrap: break-word;
-            animation: fadeIn 0.3s ease;
+            max-width: 80%; padding: 12px 16px; border-radius: 20px;
+            font-size: 1rem; line-height: 1.4; position: relative;
+            word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        @keyframes fadeIn { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
-
         .msg.sent {
-            align-self: flex-end; background: #ff416c; color: white;
-            border-bottom-right-radius: 4px;
+            align-self: flex-end;
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
+            color: white; border-bottom-right-radius: 4px;
         }
         .msg.received {
-            align-self: flex-start; background: white; color: #333;
-            border: 1px solid #eee; border-bottom-left-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.9);
+            color: #444; border-bottom-left-radius: 4px;
         }
-        .msg-time {
-            font-size: 0.65rem; text-align: right; margin-top: 3px; opacity: 0.7;
-        }
+        .msg-time { font-size: 0.65rem; text-align: right; margin-top: 5px; opacity: 0.8; }
 
+        /* Input Area */
         .chat-footer {
-            flex-shrink: 0; background: white; padding: 10px;
-            border-top: 1px solid #eee;
+            flex-shrink: 0; padding: 15px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
             display: flex; align-items: center; gap: 10px;
-            padding-bottom: env(safe-area-inset-bottom, 10px);
+            padding-bottom: env(safe-area-inset-bottom, 15px);
         }
         #msg-input {
-            flex: 1; padding: 12px; border-radius: 24px;
-            border: 1px solid #ddd; background: #f5f5f5;
-            outline: none; font-size: 1rem;
+            flex: 1; padding: 14px; border-radius: 30px; border: none;
+            background: white; outline: none; font-size: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            font-family: 'Quicksand', sans-serif;
         }
         .send-btn {
-            width: 45px; height: 45px; border-radius: 50%;
-            background: #ff416c; color: white; border: none;
+            width: 50px; height: 50px; border-radius: 50%;
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            color: white; border: none; font-size: 1.2rem; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 65, 108, 0.3);
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; cursor: pointer;
         }
 
     </style>
 </head>
-<body>
+<body onclick="createMagicHeart(event)">
 
-    <div class="hearts-bg" id="bg-hearts"></div>
+    <audio id="bg-music" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+    </audio>
 
     <div class="app-container">
         
         <div id="login-view">
-            <h2 style="color:#ff416c; margin-bottom:5px;">Love Archive ❤️</h2>
-            <p style="color:#666; margin-bottom:20px;">Messages hamesha save rahenge</p>
+            <h1 class="title-font">Our Love Space</h1>
+            <p style="color:#666; margin-bottom:30px;">Where distance doesn't matter</p>
 
-            <select id="user-select" class="input-style">
+            <select id="user-select" class="glass-input">
                 <option value="Mehbub Ali">👨 Mehbub Ali</option>
                 <option value="Minuwara Khatun">👩 Minuwara Khatun</option>
             </select>
 
-            <input type="number" id="secret-code" class="input-style" placeholder="Enter Secret Code (e.g. 786)" inputmode="numeric">
+            <input type="number" id="secret-code" class="glass-input" placeholder="Secret Code (e.g. 143)" inputmode="numeric">
             
-            <button class="btn-main" onclick="connect()">Enter Chat</button>
-            <p id="status-msg" style="color:red; font-size:0.9rem; margin-top:10px; display:none;"></p>
+            <button class="btn-heart" onclick="connect()">Enter My Heart ❤️</button>
+            <p id="status-msg" style="color:#ff416c; font-size:0.9rem; margin-top:15px; font-weight:bold;"></p>
         </div>
 
         <div id="chat-view">
             <div class="chat-header">
-                <div class="partner-info">
-                    <h3 id="partner-name">Partner</h3>
-                    <div class="status-txt">
-                        <span class="online-dot" id="dot"></span> 
-                        <span id="conn-status">Connecting...</span>
-                    </div>
+                <div>
+                    <h3 id="partner-name" class="header-title">Partner</h3>
+                    <small style="color:#555; font-size:0.75rem;">Connected 🟢</small>
                 </div>
-                <i class="fas fa-trash" onclick="clearHistory()" style="color:#ddd; cursor:pointer;" title="Clear Chat"></i>
+                <button class="music-btn" id="music-btn" onclick="toggleMusic()">
+                    <i class="fas fa-music"></i>
+                </button>
             </div>
 
-            <div class="chat-body" id="msg-container"></div>
+            <div class="chat-body" id="msg-container">
+                </div>
 
             <div class="chat-footer">
-                <input type="text" id="msg-input" placeholder="Message..." autocomplete="off">
+                <input type="text" id="msg-input" placeholder="Type something sweet..." autocomplete="off">
                 <button class="send-btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
             </div>
         </div>
@@ -181,31 +206,62 @@
         let myName = "";
         let secretCode = "";
         let topic = "";
-        let storageKey = ""; // Key to save data in browser
+        let storageKey = "";
 
-        // 1. CONNECT & LOAD HISTORY
+        // --- MAGIC HEART EFFECT (UNIQUE FEATURE) ---
+        function createMagicHeart(e) {
+            // Don't create heart if clicking on input or button
+            if(e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+
+            const heart = document.createElement('div');
+            heart.classList.add('magic-heart');
+            heart.innerHTML = '💖';
+            heart.style.left = e.clientX + 'px';
+            heart.style.top = e.clientY + 'px';
+            
+            // Random Size
+            const size = Math.random() * 20 + 15;
+            heart.style.fontSize = size + 'px';
+
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1000);
+        }
+
+        // --- MUSIC PLAYER ---
+        function toggleMusic() {
+            const audio = document.getElementById('bg-music');
+            const btn = document.getElementById('music-btn');
+            
+            if (audio.paused) {
+                audio.play();
+                btn.classList.add('playing');
+                btn.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                audio.pause();
+                btn.classList.remove('playing');
+                btn.innerHTML = '<i class="fas fa-music"></i>';
+            }
+        }
+
+        // --- CONNECTION LOGIC ---
         function connect() {
             const user = document.getElementById('user-select').value;
             const code = document.getElementById('secret-code').value.trim();
             const statusMsg = document.getElementById('status-msg');
 
             if(!code) {
-                statusMsg.style.display = 'block';
-                statusMsg.innerText = "Secret Code daalo!";
+                statusMsg.innerText = "Please enter our secret code!";
                 return;
             }
 
-            statusMsg.style.display = 'block';
-            statusMsg.style.color = 'orange';
-            statusMsg.innerText = "History Load ho rahi hai...";
+            statusMsg.innerText = "Connecting to your love... ❤️";
 
             myName = user;
             secretCode = code;
-            topic = "love_chat_perm_v3/" + code;
-            storageKey = "chat_history_" + code; // Unique key for this couple
+            topic = "mehbub_minuwara_v4/" + code;
+            storageKey = "love_history_" + code;
 
-            // MQTT Client Setup
-            const clientId = "chat_" + Math.random().toString(16).substr(2, 8);
+            const clientId = "love_" + Math.random().toString(16).substr(2, 8);
             client = new Paho.MQTT.Client(BROKER, PORT, PATH, clientId);
 
             client.onConnectionLost = onConnectionLost;
@@ -215,82 +271,48 @@
                 useSSL: true,
                 onSuccess: onConnect,
                 onFailure: (e) => {
-                    statusMsg.style.color = 'red';
-                    statusMsg.innerText = "Network Error!";
+                    statusMsg.innerText = "Network Issue! Try again.";
                 }
             });
         }
 
         function onConnect() {
-            // UI Switch
             document.getElementById('login-view').style.display = 'none';
             document.getElementById('chat-view').style.display = 'flex';
             
-            // Header Update
             const partner = (myName === "Mehbub Ali") ? "Minuwara Khatun" : "Mehbub Ali";
             document.getElementById('partner-name').innerText = partner;
-            document.getElementById('conn-status').innerText = "Online";
-            document.getElementById('dot').classList.add('active');
 
             client.subscribe(topic);
-
-            // LOAD OLD MESSAGES FROM BROWSER MEMORY
             loadHistory();
         }
 
-        // 2. STORAGE SYSTEM (The Magic)
+        // --- HISTORY & MESSAGING ---
         function loadHistory() {
             const container = document.getElementById('msg-container');
-            container.innerHTML = ""; // Clear first
-            
-            // Get data from Browser LocalStorage
+            container.innerHTML = "";
             const history = localStorage.getItem(storageKey);
             
             if (history) {
                 const messages = JSON.parse(history);
-                messages.forEach(msg => {
-                    renderMessage(msg.sender, msg.text, msg.time, false);
-                });
-                // Add a small divider
-                const divider = document.createElement('div');
-                divider.innerHTML = "<small style='color:#ccc'>--- Stored Messages ---</small>";
-                divider.style.textAlign = 'center';
-                divider.style.margin = '10px 0';
-                container.appendChild(divider);
-                
+                messages.forEach(msg => renderMessage(msg.sender, msg.text, msg.time, false));
                 container.scrollTop = container.scrollHeight;
             } else {
-                const intro = document.createElement('div');
-                intro.style.textAlign = 'center';
-                intro.style.color = '#ccc';
-                intro.style.marginTop = '20px';
-                intro.style.fontSize = '0.8rem';
-                intro.innerText = "Chat securely stored on this device 🔒";
-                container.appendChild(intro);
+                const welcome = document.createElement('div');
+                welcome.style.textAlign = 'center'; welcome.style.color = '#777';
+                welcome.style.marginTop = '20px'; welcome.style.fontSize = '0.9rem';
+                welcome.innerHTML = "✨ Start of your beautiful journey ✨";
+                container.appendChild(welcome);
             }
         }
 
         function saveToHistory(sender, text, time) {
-            // Get current list
             let history = localStorage.getItem(storageKey);
             let messages = history ? JSON.parse(history) : [];
-
-            // Add new message
-            messages.push({ sender: sender, text: text, time: time });
-
-            // Save back to browser
+            messages.push({ sender, text, time });
             localStorage.setItem(storageKey, JSON.stringify(messages));
         }
 
-        function clearHistory() {
-            if(confirm("Kya saari purani chat delete karni hai?")) {
-                localStorage.removeItem(storageKey);
-                document.getElementById('msg-container').innerHTML = "";
-                alert("History Cleared!");
-            }
-        }
-
-        // 3. SEND & RECEIVE
         function sendMsg() {
             const input = document.getElementById('msg-input');
             const txt = input.value.trim();
@@ -298,18 +320,12 @@
 
             const timeNow = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
-            // 1. Send to Server (for Partner)
-            const payload = JSON.stringify({
-                sender: myName,
-                text: txt,
-                time: timeNow
-            });
+            const payload = JSON.stringify({ sender: myName, text: txt, time: timeNow });
             const message = new Paho.MQTT.Message(payload);
             message.destinationName = topic;
             client.send(message);
 
-            // 2. Show on My Screen & Save Locally
-            renderMessage(myName, txt, timeNow, true); // true = animate
+            renderMessage(myName, txt, timeNow, true);
             saveToHistory(myName, txt, timeNow);
 
             input.value = "";
@@ -318,11 +334,8 @@
 
         function onMessageArrived(msg) {
             const data = JSON.parse(msg.payloadString);
-            
-            // Agar message mera nahi hai (partner ka hai)
             if (data.sender !== myName) {
                 renderMessage(data.sender, data.text, data.time, true);
-                // Save partner's message to my history
                 saveToHistory(data.sender, data.text, data.time);
             }
         }
@@ -333,7 +346,7 @@
             
             const isMe = (sender === myName);
             div.className = `msg ${isMe ? 'sent' : 'received'}`;
-            if(!animate) div.style.animation = "none"; // Purane msg animation ke bina
+            if(!animate) div.style.animation = "none";
             
             div.innerHTML = `${text} <div class="msg-time">${time}</div>`;
 
@@ -342,27 +355,12 @@
         }
 
         function onConnectionLost(responseObject) {
-            if (responseObject.errorCode !== 0) {
-                document.getElementById('conn-status').innerText = "Offline";
-                document.getElementById('dot').classList.remove('active');
-            }
+            if (responseObject.errorCode !== 0) console.log("Lost connection");
         }
 
-        // Enter Key
         document.getElementById('msg-input').addEventListener("keypress", function(event) {
             if (event.key === "Enter") sendMsg();
         });
-
-        // Hearts Animation
-        setInterval(() => {
-            const h = document.createElement('div');
-            h.classList.add('heart');
-            h.innerHTML = '❤️';
-            h.style.left = Math.random() * 100 + '%';
-            h.style.animationDuration = Math.random() * 3 + 3 + 's';
-            document.getElementById('bg-hearts').appendChild(h);
-            setTimeout(() => h.remove(), 6000);
-        }, 1000);
 
     </script>
 </body>
