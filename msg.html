@@ -9,206 +9,158 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
 
     <style>
-        /* --- GLOBAL & ANIMATIONS --- */
+        /* --- GLOBAL SETTINGS --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
         body {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
-            overflow: hidden;
-            font-family: 'Quicksand', sans-serif;
-            background: #000; /* Dark Base for Glowing effects */
+            margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
+            font-family: 'Quicksand', sans-serif; background: #000;
         }
 
-        /* --- BACKGROUND LOVE EFFECT (Slow, Blur, Multicolor) --- */
-        .love-bg-container {
+        /* --- BACKGROUND HEARTS (Blurred & Multicolor) --- */
+        .bg-container {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -2; overflow: hidden;
-            background: linear-gradient(135deg, #1a0b0e, #2c0e15); /* Dark Romantic Base */
+            z-index: -2; overflow: hidden; background: #0a0a0a; /* Pure dark bg */
         }
-
         .blur-heart {
-            position: absolute;
-            bottom: -50px;
-            font-size: 30px;
-            filter: blur(4px); /* Blur Effect */
-            opacity: 0.6;
-            animation: floatUp linear infinite;
+            position: absolute; bottom: -50px; font-size: 35px;
+            filter: blur(6px); /* HEARTS ARE BLURRED */
+            opacity: 0.7; animation: floatUp linear infinite;
         }
-
         @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 0; }
-            20% { opacity: 0.6; }
-            80% { opacity: 0.6; }
-            100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
+            to { transform: translateY(-120vh) rotate(360deg) scale(1.5); opacity: 0; }
         }
 
-        /* --- GLASS CONTAINER --- */
+        /* --- MAIN APP CONTAINER (Transparent) --- */
         .app-container {
-            display: flex; flex-direction: column;
-            width: 100%; max-width: 500px;
-            height: 100dvh; margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
-            border-left: 1px solid rgba(255,255,255,0.2);
-            border-right: 1px solid rgba(255,255,255,0.2);
-            position: relative;
-            backdrop-filter: blur(10px);
+            display: flex; flex-direction: column; width: 100%; max-width: 500px;
+            height: 100dvh; margin: 0 auto; position: relative;
+            /* Blur hata diya, transparent kar diya */
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            border-right: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* --- LOGIN SCREEN --- */
+        /* --- LOGIN PAGE --- */
         #login-view {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 50;
-            background: rgba(20, 10, 15, 0.95); /* Dark overlay */
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            padding: 30px;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 50;
+            background: rgba(15, 5, 10, 0.9); /* Darker overlay for login */
+            display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 30px;
         }
         .title-font { 
-            font-family: 'Dancing Script', cursive; 
-            font-size: 3.5rem; 
-            background: -webkit-linear-gradient(#ff758c, #ff7eb3);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 30px; 
-            text-shadow: 0 0 20px rgba(255, 117, 140, 0.5);
+            font-family: 'Dancing Script', cursive; font-size: 3rem; color: white;
+            margin-bottom: 30px; text-align: center; text-shadow: 0 0 10px rgba(255, 65, 108, 0.5);
         }
-        
+        /* Title Heart Animation */
+        .title-heart {
+            display: inline-block;
+            animation: heartBeatSlow 3s infinite ease-in-out;
+            filter: drop-shadow(0 0 8px red);
+        }
+        @keyframes heartBeatSlow {
+            0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); filter: drop-shadow(0 0 20px red); }
+        }
+
         .glass-input {
             width: 100%; padding: 18px; margin: 20px 0;
-            border: 2px solid rgba(255,255,255,0.3); 
-            border-radius: 30px;
+            border: 2px solid rgba(255,255,255,0.3); border-radius: 30px;
             font-size: 1.2rem; outline: none; text-align: center;
-            background: rgba(255, 255, 255, 0.1);
-            color: white; letter-spacing: 5px;
-            font-family: 'Quicksand', sans-serif;
-            transition: 0.3s;
+            background: rgba(255, 255, 255, 0.1); color: white; letter-spacing: 3px;
+            font-family: 'Quicksand', sans-serif; transition: 0.3s;
         }
-        .glass-input:focus { border-color: #ff416c; box-shadow: 0 0 15px rgba(255, 65, 108, 0.4); }
+        .glass-input:focus { border-color: #ff416c; box-shadow: 0 0 20px rgba(255, 65, 108, 0.5) inset; }
 
-        .btn-heart {
-            width: 100%; padding: 16px; border: none; border-radius: 30px;
-            background: linear-gradient(to right, #ff416c, #ff4b2b);
-            color: white; font-size: 1.2rem; font-weight: bold; cursor: pointer;
-            box-shadow: 0 0 20px rgba(255, 65, 108, 0.5);
-            margin-top: 20px;
+        /* COOL GLOWING BUTTON */
+        .btn-cool-glow {
+            width: 100%; padding: 18px; border: none; border-radius: 30px;
+            color: white; font-size: 1.3rem; font-weight: bold; cursor: pointer; margin-top: 20px;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b, #ff416c);
+            background-size: 200% auto;
+            animation: gradientMove 3s linear infinite, pulseBtn 2s infinite;
+            box-shadow: 0 0 20px rgba(255, 65, 108, 0.6);
         }
+        @keyframes gradientMove { 0% {background-position: 0% center;} 100% {background-position: 200% center;} }
+        @keyframes pulseBtn { 0% {transform: scale(1);} 50% {transform: scale(1.02); box-shadow: 0 0 40px rgba(255, 65, 108, 0.8);} 100% {transform: scale(1);} }
 
-        /* --- CHAT HEADER --- */
+        /* --- TRANSITION OVERLAY (Broken Heart Effect) --- */
+        #transition-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 999; display: none; /* Hidden initially */
+            justify-content: center; align-items: center; overflow: hidden;
+        }
+        /* Heart made of pure CSS */
+        .heart-piece {
+            position: absolute; width: 120px; height: 180px;
+            background: linear-gradient(to bottom, #ff416c, #ff4b2b);
+            border-radius: 60px 60px 0 0;
+            box-shadow: 0 0 30px rgba(255, 65, 108, 0.8);
+            transition: all 1.8s cubic-bezier(0.22, 1, 0.36, 1); /* Slow motion reveal */
+        }
+        .piece-left { transform: rotate(-45deg); left: 50%; margin-left: -115px; transform-origin: 100% 100%; }
+        .piece-right { transform: rotate(45deg); right: 50%; margin-right: -115px; transform-origin: 0% 100%; }
+
+        /* Animation Trigger Classes */
+        .breaking .piece-left { transform: rotate(-90deg) translate(-150px, -50px); opacity: 0; }
+        .breaking .piece-right { transform: rotate(90deg) translate(150px, -50px); opacity: 0; }
+        .fading-out { opacity: 0; transition: opacity 1s ease; }
+
+
+        /* --- CHAT PAGE --- */
         .chat-header {
-            flex-shrink: 0; height: 80px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
+            flex-shrink: 0; height: 85px;
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent header */
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 15px; z-index: 10;
+            display: flex; align-items: center; justify-content: space-between; padding: 0 15px;
         }
-        
-        .header-info { display: flex; flex-direction: column; }
-        .header-title { 
-            font-family: 'Dancing Script', cursive; font-size: 1.8rem; 
-            color: white; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
-        
-        /* ONLINE / OFFLINE BADGE */
-        .status-badge {
-            font-size: 0.8rem; font-weight: bold;
-            margin-top: 3px; display: flex; align-items: center; gap: 6px;
-        }
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #555; }
-        
-        .status-online { color: #00e676; text-shadow: 0 0 10px rgba(0,230,118,0.5); }
-        .dot-online { background: #00e676; box-shadow: 0 0 8px #00e676; }
-        
-        .status-offline { color: #ff5252; }
-        .dot-offline { background: #ff5252; }
+        .header-title { font-family: 'Dancing Script', cursive; font-size: 1.8rem; color: white; margin: 0; }
+        .status-badge { font-size: 0.8rem; font-weight: bold; margin-top: 5px; display: flex; align-items: center; gap: 6px; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .status-online { color: #00e676; } .dot-online { background: #00e676; box-shadow: 0 0 10px #00e676; }
+        .status-offline { color: #ff5252; } .dot-offline { background: #ff5252; box-shadow: 0 0 5px #ff5252; }
 
-        /* LOGO ANIMATION (ZOOM + GLOW) */
+        /* Fixed Logo Animation (No Border) */
         .custom-logo {
-            width: 50px; height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid rgba(255,255,255,0.5);
-            /* Zoom In/Out Animation + Glow */
-            animation: pulseGlow 4s infinite ease-in-out;
+            width: 55px; height: 55px; border-radius: 50%; object-fit: cover;
+            border: none; /* BORDER REMOVED */
+            animation: logoGlow pulseGlow 4s infinite ease-in-out;
         }
-        @keyframes pulseGlow {
-            0% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 65, 108, 0.2); }
-            50% { transform: scale(1.15); box-shadow: 0 0 25px rgba(255, 65, 108, 0.8); }
-            100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 65, 108, 0.2); }
+        @keyframes logoGlow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(255, 65, 108, 0.5)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 20px rgba(255, 65, 108, 1)); }
         }
 
-        /* --- CHAT BODY --- */
-        .chat-body {
-            flex-grow: 1; overflow-y: auto; padding: 20px;
-            display: flex; flex-direction: column; gap: 15px;
-        }
-        
-        .msg {
-            max-width: 80%; padding: 12px 18px; border-radius: 20px;
-            font-size: 1rem; line-height: 1.4; position: relative;
-            word-wrap: break-word; color: #fff;
-            animation: slideUp 0.3s ease;
-        }
-        @keyframes slideUp { from{transform: translateY(20px); opacity: 0;} to{transform: translateY(0); opacity: 1;} }
-
-        .msg.sent {
-            align-self: flex-end;
-            background: linear-gradient(to right, #ff416c, #ff4b2b);
-            border-bottom-right-radius: 4px;
-            box-shadow: 0 5px 15px rgba(255, 65, 108, 0.3);
-        }
-        .msg.received {
-            align-self: flex-start;
-            background: rgba(255, 255, 255, 0.15);
-            border-bottom-left-radius: 4px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
+        .chat-body { flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .msg { max-width: 80%; padding: 12px 18px; border-radius: 20px; font-size: 1rem; color: #fff; position: relative; word-wrap: break-word; animation: slideUp 0.4s ease; }
+        @keyframes slideUp { from{transform: translateY(30px); opacity: 0;} to{transform: translateY(0); opacity: 1;} }
+        .msg.sent { align-self: flex-end; background: linear-gradient(to right, #ff416c, #ff4b2b); border-bottom-right-radius: 4px; box-shadow: 0 5px 15px rgba(255, 65, 108, 0.4); }
+        .msg.received { align-self: flex-start; background: rgba(255, 255, 255, 0.15); border-bottom-left-radius: 4px; border: 1px solid rgba(255,255,255,0.2); }
         .msg-time { font-size: 0.65rem; text-align: right; margin-top: 5px; opacity: 0.7; }
 
-        /* --- INPUT AREA --- */
-        .chat-footer {
-            flex-shrink: 0; padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            display: flex; align-items: center; gap: 10px;
-            padding-bottom: env(safe-area-inset-bottom, 15px);
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-        #msg-input {
-            flex: 1; padding: 14px; border-radius: 30px; border: none;
-            background: rgba(255, 255, 255, 0.2); 
-            outline: none; font-size: 1rem; color: white;
-        }
-        #msg-input::placeholder { color: rgba(255,255,255,0.6); }
-        
-        .send-btn {
-            width: 50px; height: 50px; border-radius: 50%;
-            background: white; color: #ff416c; border: none; 
-            font-size: 1.2rem; cursor: pointer;
-            box-shadow: 0 0 15px rgba(255,255,255,0.3);
-            display: flex; align-items: center; justify-content: center;
-        }
-
+        .chat-footer { flex-shrink: 0; padding: 15px; background: rgba(0, 0, 0, 0.5); border-top: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px; padding-bottom: env(safe-area-inset-bottom, 15px); }
+        #msg-input { flex: 1; padding: 14px; border-radius: 30px; border: none; background: rgba(255, 255, 255, 0.2); outline: none; font-size: 1rem; color: white; }
+        .send-btn { width: 50px; height: 50px; border-radius: 50%; background: white; color: #ff416c; border: none; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(255,255,255,0.3); transition: 0.3s; }
+        .send-btn:active { transform: scale(0.9); }
     </style>
 </head>
 <body>
 
-    <div class="love-bg-container" id="hearts-bg"></div>
+    <div class="bg-container" id="hearts-bg"></div>
+
+    <div id="transition-layer">
+        <div class="heart-piece piece-left"></div>
+        <div class="heart-piece piece-right"></div>
+    </div>
 
     <div class="app-container">
-        
         <div id="login-view">
-            <h1 class="title-font">My Soulmate</h1>
-            <input type="number" id="secret-code" class="glass-input" placeholder="PASSCODE" inputmode="numeric">
-            <button class="btn-heart" onclick="attemptLogin()">Connect Now</button>
-            <p id="error-msg" style="color:#ff5252; margin-top:15px; font-weight:bold;"></p>
+            <h1 class="title-font">Mehbub <span class="title-heart">❤️</span> Minuwara</h1>
+            <input type="number" id="secret-code" class="glass-input" placeholder="PIN" inputmode="numeric">
+            <button class="btn-cool-glow" onclick="attemptLogin()">Enter My Heart ❤️</button>
+            <p id="error-msg" style="color:#ff5252; margin-top:20px; font-weight:bold;"></p>
         </div>
 
         <div id="chat-view" style="display:none; flex-direction:column; height:100%;">
-            
             <div class="chat-header">
-                <div class="header-info">
+                <div>
                     <h3 id="partner-name" class="header-title">Partner</h3>
                     <div id="status-display" class="status-badge status-offline">
                         <span class="status-dot dot-offline" id="status-dot"></span> 
@@ -221,244 +173,149 @@
             <div class="chat-body" id="msg-container"></div>
 
             <div class="chat-footer">
-                <input type="text" id="msg-input" placeholder="Type a message..." autocomplete="off">
+                <input type="text" id="msg-input" placeholder="Write message..." autocomplete="off">
                 <button class="send-btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
             </div>
         </div>
-
     </div>
 
     <script>
-        const BROKER = "broker.emqx.io";
-        const PORT = 8084;
-        const PATH = "/mqtt";
+        const BROKER = "broker.emqx.io"; const PORT = 8084; const PATH = "/mqtt";
+        const CHAT_TOPIC = "love_chat_room_v786_msg";
+        const PRESENCE_TOPIC_BASE = "love_chat_presence_v786/";
+        const STORAGE_KEY = "love_chat_v3_history";
 
-        // CONFIGURATION
-        const CHAT_TOPIC = "love_chat_room_v786_msg"; // Messages yahan aayenge
-        const PRESENCE_TOPIC_BASE = "love_chat_presence_v786/"; // Online status ke liye
-        const STORAGE_KEY = "love_chat_v2_history";
+        let client; let myName = ""; let myID = ""; let partnerID = "";
+        let lastPingTime = 0; let onlineCheckInterval;
 
-        let client;
-        let myName = "";
-        let myID = "";      // "123" or "321"
-        let partnerID = ""; // "321" or "123"
-        
-        let lastPingTime = 0;
-        let onlineCheckInterval;
-
-        // --- 1. LOGIN & AUTH ---
         function attemptLogin() {
             const code = document.getElementById('secret-code').value.trim();
             const err = document.getElementById('error-msg');
 
-            if(code === "123") {
-                myName = "Minuwara Khatun";
-                myID = "123";
-                partnerID = "321";
-                document.getElementById('partner-name').innerText = "Mehbub Ali";
-            } else if(code === "321") {
-                myName = "Mehbub Ali";
-                myID = "321";
-                partnerID = "123";
-                document.getElementById('partner-name').innerText = "Minuwara Khatun";
-            } else {
-                err.innerText = "❌ Wrong Passcode!";
-                return;
-            }
+            if(code === "123") { myName="Minuwara Khatun"; myID="123"; partnerID="321"; document.getElementById('partner-name').innerText="Mehbub Ali"; } 
+            else if(code === "321") { myName="Mehbub Ali"; myID="321"; partnerID="123"; document.getElementById('partner-name').innerText="Minuwara Khatun"; } 
+            else { err.innerText = "❌ Wrong PIN!"; return; }
 
-            err.style.color = "#00e676";
-            err.innerText = "Connecting...";
-            initMQTT();
+            err.innerText = ""; // Clear error
+            triggerTransition(); // Start the cool animation
         }
 
-        // --- 2. MQTT CONNECTION ---
+        // --- TRANSITION ANIMATION FUNCTION ---
+        function triggerTransition() {
+            const overlay = document.getElementById('transition-layer');
+            overlay.style.display = 'flex'; // Show overlay
+
+            // 1. Start breaking animation after small delay
+            setTimeout(() => {
+                overlay.classList.add('breaking');
+            }, 100);
+
+            // 2. Connect to MQTT while animation plays
+            initMQTT();
+
+            // 3. Fade out and hide overlay after animation ends (2 seconds)
+            setTimeout(() => {
+                overlay.classList.add('fading-out');
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    overlay.classList.remove('breaking', 'fading-out');
+                    // Show chat screen finally
+                    document.getElementById('login-view').style.display = 'none';
+                    document.getElementById('chat-view').style.display = 'flex';
+                    loadHistory();
+                }, 1000); // Fade out time
+            }, 2000); // Total animation time
+        }
+
         function initMQTT() {
             const clientId = "love_user_" + Math.random().toString(16).substr(2, 8);
             client = new Paho.MQTT.Client(BROKER, PORT, PATH, clientId);
-
-            client.onConnectionLost = onConnectionLost;
-            client.onMessageArrived = onMessageArrived;
-
-            client.connect({
-                useSSL: true,
-                onSuccess: onConnect,
-                onFailure: (e) => {
-                    document.getElementById('error-msg').innerText = "Network Error!";
-                }
-            });
+            client.onConnectionLost=onConnectionLost; client.onMessageArrived=onMessageArrived;
+            client.connect({ useSSL:true, onSuccess:onConnect });
         }
 
         function onConnect() {
-            document.getElementById('login-view').style.display = 'none';
-            document.getElementById('chat-view').style.display = 'flex';
-            
-            // 1. Subscribe to Chat messages
             client.subscribe(CHAT_TOPIC);
-            
-            // 2. Subscribe to Partner's Presence (Taaki pata chale wo online hai ya nahi)
             client.subscribe(PRESENCE_TOPIC_BASE + partnerID);
-
-            // 3. Start sending "I am Online" Ping every 2 seconds
             startHeartbeat();
-
-            loadHistory();
         }
 
-        // --- 3. ONLINE / OFFLINE LOGIC ---
         function startHeartbeat() {
-            // Har 2 second mein "I am here" bhejo
             setInterval(() => {
                 const message = new Paho.MQTT.Message("online");
                 message.destinationName = PRESENCE_TOPIC_BASE + myID;
                 client.send(message);
             }, 2000);
-
-            // Har 3 second mein check karo ki partner ka ping aaya ya nahi
             onlineCheckInterval = setInterval(checkPartnerStatus, 3000);
         }
 
         function checkPartnerStatus() {
-            const now = Date.now();
-            // Agar last ping 5 second se purana hai, to Offline maano
-            if (now - lastPingTime > 5000) {
-                setOffline();
-            }
+            if (Date.now() - lastPingTime > 5000) setOffline();
         }
 
         function setOnline() {
-            const badge = document.getElementById('status-display');
-            const dot = document.getElementById('status-dot');
-            const text = document.getElementById('status-text');
-
-            badge.classList.remove('status-offline');
-            badge.classList.add('status-online');
-            
-            dot.classList.remove('dot-offline');
-            dot.classList.add('dot-online');
-            
-            text.innerText = "Online";
+            const badge=document.getElementById('status-display'); const dot=document.getElementById('status-dot'); const text=document.getElementById('status-text');
+            badge.classList.remove('status-offline'); badge.classList.add('status-online');
+            dot.classList.remove('dot-offline'); dot.classList.add('dot-online'); text.innerText = "Online";
         }
-
         function setOffline() {
-            const badge = document.getElementById('status-display');
-            const dot = document.getElementById('status-dot');
-            const text = document.getElementById('status-text');
-
-            badge.classList.remove('status-online');
-            badge.classList.add('status-offline');
-            
-            dot.classList.remove('dot-online');
-            dot.classList.add('dot-offline');
-            
-            text.innerText = "Offline";
+            const badge=document.getElementById('status-display'); const dot=document.getElementById('status-dot'); const text=document.getElementById('status-text');
+            badge.classList.remove('status-online'); badge.classList.add('status-offline');
+            dot.classList.remove('dot-online'); dot.classList.add('dot-offline'); text.innerText = "Offline";
         }
 
-        // --- 4. MESSAGING & RECEIVING ---
         function sendMsg() {
             const input = document.getElementById('msg-input');
-            const txt = input.value.trim();
-            if(!txt) return;
-
-            const timeNow = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            
-            // Packet
-            const payload = JSON.stringify({
-                type: 'chat',
-                sender: myName,
-                text: txt,
-                time: timeNow
-            });
-
+            const txt = input.value.trim(); if(!txt) return;
+            const timeNow = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+            const payload = JSON.stringify({ type:'chat', sender:myName, text:txt, time:timeNow });
             const message = new Paho.MQTT.Message(payload);
-            message.destinationName = CHAT_TOPIC;
-            client.send(message);
-
-            renderMessage(myName, txt, timeNow, true);
-            saveToHistory(myName, txt, timeNow);
-
-            input.value = "";
-            input.focus();
+            message.destinationName = CHAT_TOPIC; client.send(message);
+            renderMessage(myName, txt, timeNow, true); saveToHistory(myName, txt, timeNow);
+            input.value = ""; input.focus();
         }
 
         function onMessageArrived(msg) {
             const topic = msg.destinationName;
-
-            // CASE 1: Presence Ping (Online Status)
-            if (topic === PRESENCE_TOPIC_BASE + partnerID) {
-                lastPingTime = Date.now();
-                setOnline();
-                return;
-            }
-
-            // CASE 2: Chat Message
+            if (topic === PRESENCE_TOPIC_BASE + partnerID) { lastPingTime = Date.now(); setOnline(); return; }
             if (topic === CHAT_TOPIC) {
-                try {
-                    const data = JSON.parse(msg.payloadString);
+                try { const data = JSON.parse(msg.payloadString);
                     if (data.type === 'chat' && data.sender !== myName) {
-                        renderMessage(data.sender, data.text, data.time, true);
-                        saveToHistory(data.sender, data.text, data.time);
+                        renderMessage(data.sender, data.text, data.time, true); saveToHistory(data.sender, data.text, data.time);
                     }
                 } catch(e) {}
             }
         }
 
         function renderMessage(sender, text, time, animate) {
-            const container = document.getElementById('msg-container');
-            const div = document.createElement('div');
-            const isMe = (sender === myName);
-            
-            div.className = `msg ${isMe ? 'sent' : 'received'}`;
-            if(!animate) div.style.animation = "none";
-            
+            const container = document.getElementById('msg-container'); const div = document.createElement('div'); const isMe = (sender === myName);
+            div.className = `msg ${isMe ? 'sent' : 'received'}`; if(!animate) div.style.animation = "none";
             div.innerHTML = `${text} <div class="msg-time">${time}</div>`;
-            container.appendChild(div);
-            container.scrollTop = container.scrollHeight;
+            container.appendChild(div); container.scrollTop = container.scrollHeight;
         }
 
-        // --- 5. HISTORY ---
         function loadHistory() {
-            const container = document.getElementById('msg-container');
-            container.innerHTML = "";
+            const container = document.getElementById('msg-container'); container.innerHTML = "";
             const history = localStorage.getItem(STORAGE_KEY);
-            if(history) {
-                const msgs = JSON.parse(history);
-                msgs.forEach(m => renderMessage(m.sender, m.text, m.time, false));
-                container.scrollTop = container.scrollHeight;
-            } else {
-                container.innerHTML = "<div style='text-align:center; color:#rgba(255,255,255,0.5); margin-top:20px; font-size:0.8rem;'>✨ Forever & Always ✨</div>";
-            }
+            if(history) { JSON.parse(history).forEach(m => renderMessage(m.sender, m.text, m.time, false)); container.scrollTop = container.scrollHeight; }
         }
-
         function saveToHistory(sender, text, time) {
-            let history = localStorage.getItem(STORAGE_KEY);
-            let msgs = history ? JSON.parse(history) : [];
-            msgs.push({sender, text, time});
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(msgs));
+            let history = localStorage.getItem(STORAGE_KEY); let msgs = history ? JSON.parse(history) : [];
+            msgs.push({sender, text, time}); localStorage.setItem(STORAGE_KEY, JSON.stringify(msgs));
         }
-
         function onConnectionLost(e) { console.log("Lost connection"); }
         document.getElementById('msg-input').addEventListener("keypress", (e) => { if(e.key==="Enter") sendMsg(); });
 
-        // --- 6. BACKGROUND HEARTS GENERATOR ---
+        // --- BACKGROUND HEARTS GENERATOR (Blurred & Multicolor) ---
         function createHearts() {
-            const container = document.getElementById('hearts-bg');
-            const heart = document.createElement('div');
-            heart.classList.add('blur-heart');
-            heart.innerHTML = '❤'; 
-            
-            // Random Properties
+            const container = document.getElementById('hearts-bg'); const heart = document.createElement('div');
+            heart.classList.add('blur-heart'); heart.innerHTML = '❤'; 
             heart.style.left = Math.random() * 100 + '%';
-            heart.style.animationDuration = (Math.random() * 10 + 10) + 's'; // Slow motion (10-20s)
-            
-            // Multicolor Hue Rotate
-            const hue = Math.floor(Math.random() * 360);
-            heart.style.color = `hsl(${hue}, 70%, 60%)`;
-            
-            container.appendChild(heart);
-            setTimeout(() => heart.remove(), 20000); // Remove after animation
+            heart.style.animationDuration = (Math.random() * 15 + 15) + 's';
+            heart.style.color = `hsl(${Math.floor(Math.random() * 360)}, 80%, 60%)`;
+            container.appendChild(heart); setTimeout(() => heart.remove(), 30000);
         }
-        setInterval(createHearts, 1500); // New heart every 1.5s
-
+        setInterval(createHearts, 1000);
     </script>
 </body>
 </html>
