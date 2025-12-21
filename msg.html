@@ -2,387 +2,303 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mehbub & Minuwara ❤️ Private Space</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Mehbub ❤️ Minuwara</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
 
     <style>
-        /* --- PREMIUM LOVE THEME --- */
+        /* --- CSS RESET & MOBILE OPTIMIZATION --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        
+        html, body {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            overflow: hidden; /* Page ko scroll hone se rokega */
+            font-family: 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #fff0f5 0%, #ffe6e6 100%);
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
         }
 
-        /* Animated Hearts Background */
-        .hearts-container {
-            position: absolute; width: 100%; height: 100%; overflow: hidden; z-index: -1;
+        /* --- LAYOUT CONTAINER (FLEXBOX) --- */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 500px; /* Tablet/Desktop par zyada chouda na ho */
+            height: 100dvh; /* Dynamic Height for Mobile Browsers */
+            margin: 0 auto; /* Center in Desktop */
+            background: #fff;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* BACKGROUND HEARTS */
+        .hearts-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; overflow: hidden; pointer-events: none;
         }
         .heart {
-            position: absolute; bottom: -50px; color: rgba(255, 65, 108, 0.2);
-            animation: floatUp linear infinite; font-size: 20px;
+            position: absolute; bottom: -50px; font-size: 20px; color: rgba(255, 65, 108, 0.2);
+            animation: float 6s linear infinite;
         }
-        @keyframes floatUp {
-            to { transform: translateY(-110vh) scale(1.5); opacity: 0; }
-        }
-
-        /* MAIN APP BOX */
-        .app-box {
-            width: 100%; max-width: 450px; height: 100%;
-            background: #fff;
-            display: flex; flex-direction: column;
-            position: relative;
-            box-shadow: 0 0 40px rgba(255, 65, 108, 0.15);
-        }
+        @keyframes float { to { transform: translateY(-110vh); opacity: 0; } }
 
         /* --- LOGIN SCREEN --- */
-        #login-panel {
+        #login-view {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #fff; z-index: 999;
+            background: #fff; z-index: 20;
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
-            padding: 30px; text-align: center;
-            transition: opacity 0.5s;
+            padding: 30px;
         }
-        .login-logo {
-            font-size: 4rem; color: #ff416c; margin-bottom: 10px;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.1);} 100% {transform: scale(1);} }
-        
-        .custom-select, .custom-input {
+        .input-style {
             width: 100%; padding: 15px; margin: 10px 0;
-            border: 2px solid #ffdee9; border-radius: 15px;
-            font-size: 1rem; outline: none; background: #fffbfc;
-            transition: 0.3s;
+            border: 2px solid #ffdee9; border-radius: 12px;
+            font-size: 1rem; outline: none;
         }
-        .custom-input:focus { border-color: #ff416c; box-shadow: 0 0 10px rgba(255,65,108,0.1); }
-        
-        .connect-btn {
-            background: linear-gradient(to right, #ff416c, #ff4b2b);
-            color: white; border: none; padding: 15px;
-            width: 100%; border-radius: 30px;
-            font-size: 1.1rem; font-weight: bold; cursor: pointer;
-            margin-top: 15px; box-shadow: 0 5px 20px rgba(255, 65, 108, 0.4);
+        .btn-main {
+            width: 100%; padding: 15px; border: none; border-radius: 30px;
+            background: #ff416c; color: white; font-size: 1.1rem;
+            margin-top: 10px; cursor: pointer;
         }
-        .connect-btn:active { transform: scale(0.98); }
 
-        /* --- CHAT UI --- */
-        #chat-panel { display: none; flex-direction: column; height: 100%; }
-        
+        /* --- CHAT SCREEN STRUCTURE --- */
+        #chat-view {
+            display: none; /* JS se Flex hoga */
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+        }
+
+        /* 1. HEADER (Fixed Top) */
         .chat-header {
-            padding: 15px; background: white;
-            border-bottom: 1px solid #ffe6e6;
+            flex-shrink: 0; /* Shrink nahi hoga */
+            height: 60px;
+            background: white;
+            border-bottom: 1px solid #f0f0f0;
             display: flex; align-items: center; justify-content: space-between;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            padding: 0 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            z-index: 10;
         }
-        .user-info h3 { margin: 0; color: #333; font-size: 1.1rem; }
-        .status { font-size: 0.8rem; color: #888; display: flex; align-items: center; gap: 5px; }
-        .dot { width: 8px; height: 8px; background: #ccc; border-radius: 50%; }
-        .dot.online { background: #00e676; box-shadow: 0 0 5px #00e676; }
+        .partner-info h3 { margin: 0; font-size: 1.1rem; color: #333; }
+        .status-txt { font-size: 0.75rem; color: #888; }
 
-        .chat-area {
-            flex: 1; padding: 15px; overflow-y: auto;
+        /* 2. MESSAGES LIST (Scrollable Area) */
+        .chat-body {
+            flex-grow: 1; /* Bachi hui jagah lega */
+            overflow-y: auto; /* Sirf ye area scroll karega */
+            padding: 15px;
             background: #fafafa;
             display: flex; flex-direction: column; gap: 10px;
-            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
         }
-        
-        .msg {
-            max-width: 80%; padding: 10px 15px; border-radius: 18px;
-            font-size: 0.95rem; line-height: 1.4; position: relative;
-            animation: slideIn 0.3s ease;
-        }
-        @keyframes slideIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
 
+        /* Messages Styles */
+        .msg {
+            max-width: 80%; padding: 10px 14px; border-radius: 16px;
+            font-size: 0.95rem; line-height: 1.4; position: relative;
+            word-wrap: break-word;
+        }
         .msg.sent {
             align-self: flex-end; background: #ff416c; color: white;
             border-bottom-right-radius: 4px;
         }
         .msg.received {
-            align-self: flex-start; background: white; color: #444;
-            border-bottom-left-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #f0f0f0;
+            align-self: flex-start; background: white; color: #333;
+            border: 1px solid #eee; border-bottom-left-radius: 4px;
         }
-        .time {
-            font-size: 0.65rem; text-align: right; margin-top: 4px; opacity: 0.7;
+        .msg-time {
+            font-size: 0.65rem; text-align: right; margin-top: 3px; opacity: 0.7;
         }
 
-        .input-zone {
-            padding: 10px; background: white; border-top: 1px solid #f0f0f0;
+        /* 3. INPUT AREA (Fixed Bottom) */
+        .chat-footer {
+            flex-shrink: 0; /* Shrink nahi hoga */
+            background: white;
+            padding: 10px;
+            border-top: 1px solid #eee;
             display: flex; align-items: center; gap: 10px;
+            /* Safe area for iPhone X and newer */
+            padding-bottom: env(safe-area-inset-bottom, 10px);
         }
+
         #msg-input {
-            flex: 1; padding: 12px 15px; border-radius: 25px;
-            border: 1px solid #eee; background: #f9f9f9; outline: none;
+            flex: 1; padding: 12px; border-radius: 24px;
+            border: 1px solid #ddd; background: #f5f5f5;
+            outline: none; font-size: 1rem;
         }
-        .send-btn-icon {
+        .send-btn {
             width: 45px; height: 45px; border-radius: 50%;
             background: #ff416c; color: white; border: none;
             display: flex; align-items: center; justify-content: center;
             font-size: 1.2rem; cursor: pointer;
         }
 
-        /* Loading Spinner */
-        .loader {
-            border: 3px solid #f3f3f3; border-top: 3px solid #ff416c;
-            border-radius: 50%; width: 20px; height: 20px;
-            animation: spin 1s linear infinite; display: none;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
     </style>
 </head>
 <body>
 
-    <div class="hearts-container" id="hearts-bg"></div>
+    <div class="hearts-bg" id="bg-hearts"></div>
 
-    <div class="app-box">
+    <div class="app-container">
         
-        <div id="login-panel">
-            <div class="login-logo">❤️</div>
-            <h2 style="color: #333;">Love Link</h2>
-            <p style="color: #666; font-size: 0.9rem; margin-bottom: 20px;">Secure Private Chat</p>
+        <div id="login-view">
+            <h2 style="color:#ff416c; margin-bottom:5px;">Love Connection ❤️</h2>
+            <p style="color:#666; margin-bottom:20px;">Apni pehchan batao</p>
 
-            <select id="user-select" class="custom-select">
-                <option value="Mehbub Ali">👨 Main Mehbub Ali hun</option>
-                <option value="Minuwara Khatun">👩 Main Minuwara Khatun hun</option>
+            <select id="user-select" class="input-style">
+                <option value="Mehbub Ali">👨 Mehbub Ali</option>
+                <option value="Minuwara Khatun">👩 Minuwara Khatun</option>
             </select>
 
-            <input type="text" id="passcode" class="custom-input" placeholder="Secret Password (e.g. 143)" autocomplete="off">
+            <input type="number" id="secret-code" class="input-style" placeholder="Enter Secret Code (e.g. 786)" inputmode="numeric">
             
-            <button class="connect-btn" onclick="startChat()">
-                <span id="btn-text">Connect Now</span>
-                <div class="loader" id="btn-loader"></div>
-            </button>
-            <p id="error-msg" style="color: red; font-size: 0.8rem; margin-top: 10px; display: none;"></p>
+            <button class="btn-main" onclick="connect()">Start Chatting</button>
+            <p id="status-msg" style="color:red; font-size:0.9rem; margin-top:10px; display:none;"></p>
         </div>
 
-        <div id="chat-panel">
+        <div id="chat-view">
             <div class="chat-header">
-                <div class="user-info">
+                <div class="partner-info">
                     <h3 id="partner-name">Partner</h3>
-                    <div class="status">
-                        <span class="dot" id="status-dot"></span> 
-                        <span id="status-text">Disconnected</span>
-                    </div>
+                    <div class="status-txt" id="conn-status">Waiting to connect...</div>
                 </div>
-                <div style="font-size: 1.5rem;">💌</div>
+                <div style="font-size:1.5rem;">💕</div>
             </div>
 
-            <div class="chat-area" id="messages">
-                <div style="text-align: center; color: #aaa; font-size: 0.8rem; margin-top: 20px;">
-                    🔒 End-to-End Encrypted Feel<br>Messages are not saved permanently.
+            <div class="chat-body" id="msg-container">
+                <div style="text-align:center; color:#ccc; font-size:0.8rem; margin-top:20px;">
+                    Messages are private and secure 🔒
                 </div>
             </div>
 
-            <div class="input-zone">
-                <input type="text" id="msg-input" placeholder="Type a romantic message..." onkeypress="handleEnter(event)">
-                <button class="send-btn-icon" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+            <div class="chat-footer">
+                <input type="text" id="msg-input" placeholder="Type here..." autocomplete="off">
+                <button class="send-btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
             </div>
         </div>
 
     </div>
 
     <script>
-        // --- 1. SETUP SERVER DETAILS (SECURE WSS) ---
-        // Using EMQX Public Broker over SSL (Port 8084) - Works on GitHub Pages
-        const MQTT_HOST = "broker.emqx.io";
-        const MQTT_PORT = 8084; 
-        const MQTT_PATH = "/mqtt";
-        
+        // SERVER CONFIG (SECURE)
+        const BROKER = "broker.emqx.io";
+        const PORT = 8084;
+        const PATH = "/mqtt";
+
         let client;
         let myName = "";
-        let topicBase = "love_chat_secure_v2/"; 
-        let myTopic = "";
+        let topic = "";
 
-        // --- 2. CONNECT FUNCTION ---
-        function startChat() {
+        // 1. CONNECT
+        function connect() {
             const user = document.getElementById('user-select').value;
-            const pass = document.getElementById('passcode').value.trim();
-            const btnText = document.getElementById('btn-text');
-            const loader = document.getElementById('btn-loader');
-            const errorMsg = document.getElementById('error-msg');
+            const code = document.getElementById('secret-code').value.trim();
+            const statusMsg = document.getElementById('status-msg');
 
-            if(!pass) {
-                errorMsg.style.display = 'block';
-                errorMsg.innerText = "Please enter a Secret Password!";
+            if(!code) {
+                statusMsg.style.display = 'block';
+                statusMsg.innerText = "Please enter a code!";
                 return;
             }
 
-            // UI Loading State
-            btnText.style.display = 'none';
-            loader.style.display = 'inline-block';
-            errorMsg.style.display = 'none';
+            statusMsg.style.display = 'block';
+            statusMsg.style.color = 'orange';
+            statusMsg.innerText = "Connecting...";
 
             myName = user;
-            // Generate unique topic based on password
-            myTopic = topicBase + pass; 
+            topic = "love_chat_app/" + code;
 
-            // Create Client ID
-            const clientId = "LoveChat_" + Math.random().toString(16).substr(2, 8);
-
-            // Initialize Paho Client
-            client = new Paho.MQTT.Client(MQTT_HOST, MQTT_PORT, MQTT_PATH, clientId);
+            const clientId = "chat_" + Math.random().toString(16).substr(2, 8);
+            
+            client = new Paho.MQTT.Client(BROKER, PORT, PATH, clientId);
 
             client.onConnectionLost = onConnectionLost;
             client.onMessageArrived = onMessageArrived;
 
-            // Connect Options (Secure WSS)
-            const options = {
-                useSSL: true, // IMPORTANT FOR GITHUB PAGES
-                timeout: 3,
+            client.connect({
+                useSSL: true,
                 onSuccess: onConnect,
-                onFailure: onFailure
-            };
-
-            try {
-                client.connect(options);
-            } catch (e) {
-                onFailure(e);
-            }
+                onFailure: (e) => {
+                    statusMsg.style.color = 'red';
+                    statusMsg.innerText = "Failed: Check Internet";
+                }
+            });
         }
 
-        // --- 3. CONNECTION HANDLERS ---
         function onConnect() {
-            console.log("Connected Successfully");
+            // UI Switch
+            document.getElementById('login-view').style.display = 'none';
+            document.getElementById('chat-view').style.display = 'flex';
             
-            // Subscribe to Topic
-            client.subscribe(myTopic);
-            
-            // Send "I am Online" Notification
-            sendSystemMessage("joined the chat ❤️");
-
-            // Switch Screen
-            document.getElementById('login-panel').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('login-panel').style.display = 'none';
-                document.getElementById('chat-panel').style.display = 'flex';
-            }, 500);
-
-            // Update Header
+            // Header Update
             const partner = (myName === "Mehbub Ali") ? "Minuwara Khatun" : "Mehbub Ali";
             document.getElementById('partner-name').innerText = partner;
-            updateStatus(true);
-        }
+            document.getElementById('conn-status').innerText = "Online";
+            document.getElementById('conn-status').style.color = "#00c853";
 
-        function onFailure(responseObject) {
-            console.log("Failed: " + responseObject.errorMessage);
-            document.getElementById('btn-text').style.display = 'inline';
-            document.getElementById('btn-loader').style.display = 'none';
-            const err = document.getElementById('error-msg');
-            err.style.display = 'block';
-            err.innerText = "Connection Failed. Check Internet or Try again.";
+            client.subscribe(topic);
         }
 
         function onConnectionLost(responseObject) {
             if (responseObject.errorCode !== 0) {
-                console.log("Lost Connection: " + responseObject.errorMessage);
-                updateStatus(false);
+                document.getElementById('conn-status').innerText = "Reconnecting...";
+                document.getElementById('conn-status').style.color = "red";
             }
         }
 
-        function updateStatus(online) {
-            const dot = document.getElementById('status-dot');
-            const text = document.getElementById('status-text');
-            if(online) {
-                dot.classList.add('online');
-                text.innerText = "Online";
-                text.style.color = "#00e676";
-            } else {
-                dot.classList.remove('online');
-                text.innerText = "Reconnecting...";
-                text.style.color = "red";
-            }
-        }
-
-        // --- 4. MESSAGING LOGIC ---
-        function sendMessage() {
+        // 2. SEND MESSAGE
+        function sendMsg() {
             const input = document.getElementById('msg-input');
-            const text = input.value.trim();
-            if(text === "") return;
+            const txt = input.value.trim();
+            if(!txt) return;
 
-            const payload = {
+            const payload = JSON.stringify({
                 sender: myName,
-                text: text,
-                type: 'msg',
+                text: txt,
                 time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-            };
+            });
 
-            const message = new Paho.MQTT.Message(JSON.stringify(payload));
-            message.destinationName = myTopic;
+            const message = new Paho.MQTT.Message(payload);
+            message.destinationName = topic;
             client.send(message);
 
             input.value = "";
+            input.focus(); // Keep keyboard open
         }
 
-        function sendSystemMessage(text) {
-            const payload = {
-                sender: myName,
-                text: text,
-                type: 'sys',
-                time: ''
-            };
-            const message = new Paho.MQTT.Message(JSON.stringify(payload));
-            message.destinationName = myTopic;
-            client.send(message);
-        }
+        // Enter Key Support
+        document.getElementById('msg-input').addEventListener("keypress", function(event) {
+            if (event.key === "Enter") sendMsg();
+        });
 
-        function onMessageArrived(message) {
-            const data = JSON.parse(message.payloadString);
-            const chatArea = document.getElementById('messages');
-            
-            // Handle System Messages (Joined/Left)
-            if(data.type === 'sys') {
-                if(data.sender !== myName) {
-                    const sysDiv = document.createElement('div');
-                    sysDiv.style.textAlign = 'center';
-                    sysDiv.style.fontSize = '0.75rem';
-                    sysDiv.style.color = '#888';
-                    sysDiv.style.margin = '10px 0';
-                    sysDiv.innerText = `${data.sender} ${data.text}`;
-                    chatArea.appendChild(sysDiv);
-                }
-                return;
-            }
-
-            // Handle Normal Messages
+        // 3. RECEIVE MESSAGE
+        function onMessageArrived(msg) {
+            const data = JSON.parse(msg.payloadString);
+            const container = document.getElementById('msg-container');
             const div = document.createElement('div');
-            const isMe = (data.sender === myName);
             
+            const isMe = (data.sender === myName);
             div.className = `msg ${isMe ? 'sent' : 'received'}`;
-            div.innerHTML = `
-                ${data.text}
-                <div class="time">${data.time} ${isMe ? '<i class="fas fa-check"></i>' : ''}</div>
-            `;
+            div.innerHTML = `${data.text} <div class="msg-time">${data.time}</div>`;
 
-            chatArea.appendChild(div);
-            chatArea.scrollTop = chatArea.scrollHeight;
+            container.appendChild(div);
+            
+            // Auto Scroll to Bottom
+            container.scrollTop = container.scrollHeight;
         }
 
-        function handleEnter(e) {
-            if(e.key === 'Enter') sendMessage();
-        }
-
-        // --- 5. BACKGROUND ANIMATION ---
-        function createHeart() {
-            const container = document.getElementById('hearts-bg');
-            const heart = document.createElement('div');
-            heart.classList.add('heart');
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + '%';
-            heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
-            container.appendChild(heart);
-            setTimeout(() => heart.remove(), 10000);
-        }
-        setInterval(createHeart, 800);
+        // Hearts Animation
+        setInterval(() => {
+            const h = document.createElement('div');
+            h.classList.add('heart');
+            h.innerHTML = '❤️';
+            h.style.left = Math.random() * 100 + '%';
+            h.style.animationDuration = Math.random() * 3 + 3 + 's';
+            document.getElementById('bg-hearts').appendChild(h);
+            setTimeout(() => h.remove(), 6000);
+        }, 800);
 
     </script>
 </body>
