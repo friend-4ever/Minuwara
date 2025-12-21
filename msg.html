@@ -16,23 +16,36 @@
             font-family: 'Quicksand', sans-serif; background: #000;
         }
 
-        /* --- BACKGROUND HEARTS (Glowing, Straight Up, Multicolor) --- */
+        /* --- BACKGROUND HEARTS (Fixed: Full Screen, Zoom, Slow) --- */
         .bg-container {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -2; overflow: hidden; background: #050505;
         }
         .glowing-heart {
-            position: absolute; bottom: -50px; font-size: 30px;
-            opacity: 0.8; animation: floatUpStraight linear infinite;
-            /* Strong Glow effect using text-shadow that matches the heart's color */
-            text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+            position: absolute; bottom: -100px; /* Start from below screen */
+            font-size: 30px;
+            opacity: 0; /* Start hidden */
+            animation: floatUpZoom linear infinite;
+            text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
         }
-        @keyframes floatUpStraight {
-            /* No rotation, just straight up */
-            to { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+        
+        @keyframes floatUpZoom {
+            0% { 
+                transform: translateY(0) scale(0.8); 
+                opacity: 0; 
+            }
+            10% { opacity: 0.8; } /* Fade in */
+            50% { 
+                transform: translateY(-60vh) scale(1.4); /* Zoom In mid-way */
+                opacity: 1; 
+            }
+            100% { 
+                transform: translateY(-120vh) scale(0.8); /* Zoom Out & Go off-screen */
+                opacity: 0; 
+            }
         }
 
-        /* --- MAIN APP CONTAINER --- */
+        /* --- APP CONTAINER --- */
         .app-container {
             display: flex; flex-direction: column; width: 100%; max-width: 500px;
             height: 100dvh; margin: 0 auto; position: relative;
@@ -41,21 +54,20 @@
             border-right: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* --- TRANSITION UTILS (Aesthetic Slow Fade) --- */
+        /* --- TRANSITION UTILS --- */
         .fade-transition { transition: opacity 1.5s ease-in-out; }
         .hidden-opacity { opacity: 0; pointer-events: none; }
 
         /* --- LOGIN PAGE --- */
         #login-view {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 50;
-            background: rgba(15, 5, 10, 0.9);
+            background: rgba(15, 5, 10, 0.95);
             display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 30px;
         }
         .title-font { 
             font-family: 'Dancing Script', cursive; color: white;
             margin-bottom: 30px; text-align: center;
             text-shadow: 0 0 10px rgba(255, 65, 108, 0.5);
-            /* FIX: Force one line and responsive sizing */
             white-space: nowrap;
             font-size: clamp(2rem, 7vw, 3.5rem); 
         }
@@ -85,23 +97,27 @@
         @keyframes pulseBtn { 0% {transform: scale(1);} 50% {transform: scale(1.02); box-shadow: 0 0 40px rgba(255, 65, 108, 0.8);} 100% {transform: scale(1);} }
 
         /* --- CHAT PAGE --- */
-        #chat-view { display: flex; } /* Initially flex but hidden via opacity */
+        #chat-view { display: flex; }
 
         .chat-header {
-            flex-shrink: 0; height: 85px; background: rgba(0, 0, 0, 0.5);
+            flex-shrink: 0; height: 90px; background: rgba(0, 0, 0, 0.6);
             border-bottom: 1px solid rgba(255,255,255,0.1);
             display: flex; align-items: center; justify-content: space-between; padding: 0 15px;
         }
         .header-title { font-family: 'Dancing Script', cursive; font-size: 1.8rem; color: white; margin: 0; }
-        .status-badge { font-size: 0.8rem; font-weight: bold; margin-top: 5px; display: flex; align-items: center; gap: 6px; }
+        
+        /* Status Badge Styling */
+        .status-badge { font-size: 0.75rem; font-weight: bold; margin-top: 5px; display: flex; align-items: center; gap: 6px; }
         .status-dot { width: 8px; height: 8px; border-radius: 50%; }
-        .status-online { color: #00e676; } .dot-online { background: #00e676; box-shadow: 0 0 10px #00e676; }
-        .status-offline { color: #ff5252; } .dot-offline { background: #ff5252; box-shadow: 0 0 5px #ff5252; }
+        
+        .status-online { color: #00e676; } 
+        .dot-online { background: #00e676; box-shadow: 0 0 10px #00e676; }
+        
+        .status-offline { color: #ff5252; } 
+        .dot-offline { background: #ff5252; box-shadow: 0 0 5px #ff5252; }
 
-        /* FIX: LOGO ZOOM & GLOW ANIMATION */
         .custom-logo {
             width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: none;
-            /* New animation for Zoom + Glow */
             animation: logoZoomGlow 4s ease-in-out infinite;
         }
         @keyframes logoZoomGlow {
@@ -159,39 +175,38 @@
         const BROKER = "broker.emqx.io"; const PORT = 8084; const PATH = "/mqtt";
         const CHAT_TOPIC = "love_chat_room_v786_msg";
         const PRESENCE_TOPIC_BASE = "love_chat_presence_v786/";
-        const STORAGE_KEY = "love_chat_v3_history";
+        const STORAGE_KEY = "love_chat_v4_history";
 
         let client; let myName = ""; let myID = ""; let partnerID = "";
         let lastPingTime = 0; let onlineCheckInterval;
+        let lastSeenTimestamp = ""; // Store last seen time
 
         function attemptLogin() {
             const code = document.getElementById('secret-code').value.trim();
             const err = document.getElementById('error-msg');
 
-            if(code === "123") { myName="Minuwara Khatun"; myID="123"; partnerID="321"; document.getElementById('partner-name').innerText="Mehbub Ali"; } 
-            else if(code === "321") { myName="Mehbub Ali"; myID="321"; partnerID="123"; document.getElementById('partner-name').innerText="Minuwara Khatun"; } 
+            // --- CHANGED PIN HERE ---
+            if(code === "786") { 
+                myName="Minuwara Khatun"; myID="786"; partnerID="321"; 
+                document.getElementById('partner-name').innerText="Mehbub Ali"; 
+            } 
+            else if(code === "321") { 
+                myName="Mehbub Ali"; myID="321"; partnerID="786"; 
+                document.getElementById('partner-name').innerText="Minuwara Khatun"; 
+            } 
             else { err.innerText = "❌ Wrong PIN!"; return; }
 
             err.innerText = ""; 
-            triggerAestheticTransition(); // Start new slow transition
+            triggerAestheticTransition();
         }
 
-        // --- NEW AESTHETIC SLOW TRANSITION ---
         function triggerAestheticTransition() {
             const loginView = document.getElementById('login-view');
             const chatView = document.getElementById('chat-view');
-
-            // 1. Connect MQTT in background
             initMQTT();
-
-            // 2. Fade out Login View slowly
             loginView.classList.add('hidden-opacity');
-
-            // 3. Wait for fade out (1.5s), then show Chat View
             setTimeout(() => {
-                loginView.style.display = 'none'; // Hide completely
-                
-                // Fade in Chat View slowly
+                loginView.style.display = 'none';
                 chatView.classList.remove('hidden-opacity');
                 loadHistory();
             }, 1500);
@@ -215,23 +230,35 @@
                 const message = new Paho.MQTT.Message("online");
                 message.destinationName = PRESENCE_TOPIC_BASE + myID;
                 client.send(message);
-            }, 2000);
+            }, 2000); // Ping every 2 seconds
             onlineCheckInterval = setInterval(checkPartnerStatus, 3000);
         }
 
         function checkPartnerStatus() {
-            if (Date.now() - lastPingTime > 5000) setOffline();
+            // Check if ping was received in last 5 seconds
+            if (Date.now() - lastPingTime > 5000) {
+                setOffline();
+            }
         }
 
         function setOnline() {
             const badge=document.getElementById('status-display'); const dot=document.getElementById('status-dot'); const text=document.getElementById('status-text');
             badge.classList.remove('status-offline'); badge.classList.add('status-online');
-            dot.classList.remove('dot-offline'); dot.classList.add('dot-online'); text.innerText = "Online";
+            dot.classList.remove('dot-offline'); dot.classList.add('dot-online'); 
+            text.innerText = "Online";
         }
+
         function setOffline() {
             const badge=document.getElementById('status-display'); const dot=document.getElementById('status-dot'); const text=document.getElementById('status-text');
             badge.classList.remove('status-online'); badge.classList.add('status-offline');
-            dot.classList.remove('dot-online'); dot.classList.add('dot-offline'); text.innerText = "Offline";
+            dot.classList.remove('dot-online'); dot.classList.add('dot-offline'); 
+            
+            // SHOW LAST SEEN TIME
+            if(lastSeenTimestamp) {
+                text.innerText = "Last seen: " + lastSeenTimestamp;
+            } else {
+                text.innerText = "Offline";
+            }
         }
 
         function sendMsg() {
@@ -247,7 +274,17 @@
 
         function onMessageArrived(msg) {
             const topic = msg.destinationName;
-            if (topic === PRESENCE_TOPIC_BASE + partnerID) { lastPingTime = Date.now(); setOnline(); return; }
+            
+            // PRESENCE & LAST SEEN LOGIC
+            if (topic === PRESENCE_TOPIC_BASE + partnerID) { 
+                lastPingTime = Date.now(); 
+                // Store current time for Last Seen
+                lastSeenTimestamp = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+                setOnline(); 
+                return; 
+            }
+
+            // CHAT LOGIC
             if (topic === CHAT_TOPIC) {
                 try { const data = JSON.parse(msg.payloadString);
                     if (data.type === 'chat' && data.sender !== myName) {
@@ -276,18 +313,23 @@
         function onConnectionLost(e) { console.log("Lost connection"); }
         document.getElementById('msg-input').addEventListener("keypress", (e) => { if(e.key==="Enter") sendMsg(); });
 
-        // --- NEW BACKGROUND HEARTS (Glowing, Straight Up, Multicolor) ---
+        // --- IMPROVED HEART ANIMATION (Slow, Zoom, Full Screen) ---
         function createHearts() {
             const container = document.getElementById('hearts-bg'); const heart = document.createElement('div');
             heart.classList.add('glowing-heart'); heart.innerHTML = '❤'; 
             heart.style.left = Math.random() * 100 + '%';
-            heart.style.animationDuration = (Math.random() * 10 + 15) + 's'; // Slow (15-25s)
-            // Random multicolor & inherit for glow
+            
+            // Slower animation: 20s to 35s
+            heart.style.animationDuration = (Math.random() * 15 + 20) + 's'; 
+            
             const hue = Math.floor(Math.random() * 360);
             heart.style.color = `hsl(${hue}, 80%, 60%)`; 
-            container.appendChild(heart); setTimeout(() => heart.remove(), 25000);
+            container.appendChild(heart); 
+            
+            // Remove after long time
+            setTimeout(() => heart.remove(), 35000);
         }
-        setInterval(createHearts, 800);
+        setInterval(createHearts, 1000); // Create heart every second
     </script>
 </body>
 </html>
